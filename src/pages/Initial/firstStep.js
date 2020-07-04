@@ -14,7 +14,10 @@ const FirstStep = () => {
   const navigation = useNavigation();
 
   const [name, setName] = useState('');
-  const [whatsapp, setWhatsapp] = useState({});
+  const [whatsapp, setWhatsapp] = useState({
+    raw: '',
+    formatted: '',
+  });
   const [statusButton, setStatusButton] = useState('disabled');
 
   const formatWhatsapp = (number) =>
@@ -24,7 +27,6 @@ const FirstStep = () => {
     navigation.navigate('SecondStep', { name, whatsapp });
 
   useEffect(() => {
-    console.log(whatsapp);
     if (name.length >= 4 && whatsapp.formatted.length === 16) {
       setStatusButton('');
     } else {
