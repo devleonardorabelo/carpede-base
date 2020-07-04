@@ -1,0 +1,15 @@
+// CONFIGURAÇÕES
+
+./android/app/src/main/res/...
+Alterar : Gerar icones no Android Studio, como "image asset", escolhendo os icones do sistema e os icones de notificação como SVG.
+./android/app/src/main/res/drawable/splash.png
+Alterar : Gerar uma imagem PNG (500X500) para a splash screen;
+./android/app/src/main/res/values/colors.xml
+Alterar : Alterar cor principal do aplicativo;
+./android/app/src/main/res/values/strings.xml
+Alterar : Alterar nome do Aplicativo;
+
+// ESTILIZAÇÃO
+
+./src/global.js
+Alterar: Escolher entre "Light Theme e "Dark Theme"
