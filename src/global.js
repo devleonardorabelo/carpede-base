@@ -213,7 +213,7 @@ const DarkTheme = {
   ],
 };
 
-export const Theme = DarkTheme;
+export const Theme = LightTheme;
 
 export default StyleSheet.create({
   // TEXTS

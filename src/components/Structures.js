@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Image } from 'react-native';
+import { SafeAreaView, View, Image, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import MI from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -13,7 +13,22 @@ export const Map = ({ initialRegion, coordinate, onDragEnd }) => (
     minZoomLevel={15}
   >
     <Marker coordinate={coordinate} onDragEnd={onDragEnd} draggable>
-      <MI name="map-marker" size={72} color={Theme.background3} />
+      <View style={{ alignItems: 'center' }}>
+        <Text
+          style={[
+            styles.bold,
+            {
+              backgroundColor: Theme.background3,
+              padding: 4,
+              borderRadius: 4,
+              color: '#FFFFFF',
+            },
+          ]}
+        >
+          Segure e arraste
+        </Text>
+        <MI name="map-marker" size={72} color={Theme.background3} />
+      </View>
     </Marker>
   </MapView>
 );
