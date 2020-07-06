@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, View, Animated, Text, Keyboard } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Geolocation from '@react-native-community/geolocation';
+import AuthContext from '../../contexts/auth';
 
 import imgSmile from '../../assets/illustrations/smile.png';
-import styles from '../../global';
+import styles, { Theme } from '../../global';
 import { Header } from '../../components/Header';
 import { Input, CircularButton, Button } from '../../components/Elements';
 import { Map, Modal } from '../../components/Structures';
 
 const SecondStep = () => {
   const { navigate } = useNavigation();
+  const { signUp } = useContext(AuthContext);
   const { params } = useRoute();
 
   const [address, setAddress] = useState('');
@@ -26,16 +28,20 @@ const SecondStep = () => {
   const refForm = new Animated.Value(0);
 
   const getCurrentPosition = () => {
-    Geolocation.getCurrentPosition((location) => {
-      setLatitude(location.coords.latitude);
-      setLongitude(location.coords.longitude);
-      setCurrentPosition({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-    });
+    Geolocation.getCurrentPosition(
+      (location) => {
+        setLatitude(location.coords.latitude);
+        setLongitude(location.coords.longitude);
+        setCurrentPosition({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        });
+      },
+      (error) => console.log(error),
+      { timeout: 20000 }
+    );
   };
 
   const showForm = (value) => {
@@ -55,6 +61,22 @@ const SecondStep = () => {
     }
   };
 
+  const confirmData = () => {
+    setShowModal(true);
+  };
+
+  const handleSignUp = async () => {
+    await signUp({
+      name: params.name,
+      whatsapp: params.name,
+      address,
+      complement,
+      number,
+      latitude,
+      longitude,
+    });
+  };
+
   useEffect(() => checkData(), [address, number]);
 
   useEffect(() => {
@@ -67,9 +89,9 @@ const SecondStep = () => {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Theme.background1 }}>
         <Header
-          icon="arrow-left"
+          iconLeft="arrow-left"
           actionLeft={() => navigate('FirstStep', { back: true })}
           float
         />
@@ -93,13 +115,17 @@ const SecondStep = () => {
                 style={{ flexGrow: 1, marginRight: 16 }}
                 action={(e) => setComplement(e)}
               />
-              <Input label="Numero" action={(e) => setNumber(e)} />
+              <Input
+                label="Numero"
+                action={(e) => setNumber(e)}
+                keyboardType="numeric"
+              />
             </View>
             <Button
               title="Confirmar dados"
               status={statusButton}
               disabledTitle="Preencha o Endereço"
-              action={() => setShowModal(true)}
+              action={confirmData}
             />
           </View>
         </Animated.View>
@@ -115,7 +141,7 @@ const SecondStep = () => {
           Fique a vontade para fazer seu pedido e qualquer dúvida é só nos
           chamar!
         </Text>
-        <CircularButton icon="chevron-right" center />
+        <CircularButton icon="chevron-right" center action={handleSignUp} />
       </Modal>
     </>
   );

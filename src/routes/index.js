@@ -1,10 +1,11 @@
-import React from 'react';
-
+import React, { useContext } from 'react';
+import AuthContext from '../contexts/auth';
 import AppRoutes from './app.routes';
 import StartRoutes from './start.routes';
 
-const logged = false;
-
-const Routes = () => (logged ? <AppRoutes /> : <StartRoutes />);
+const Routes = () => {
+  const { signed } = useContext(AuthContext);
+  return signed ? <AppRoutes /> : <StartRoutes />;
+};
 
 export default Routes;

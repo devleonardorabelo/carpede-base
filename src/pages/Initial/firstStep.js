@@ -8,11 +8,10 @@ import {
   Keyboard,
   PermissionsAndroid,
 } from 'react-native';
-import NavigationBarColor, {
-  hideNavigationBar,
-} from 'react-native-navigation-bar-color';
+import NavigationBarColor from 'react-native-navigation-bar-color';
 import { format } from '@buttercup/react-formatted-input';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen';
 
 import { whatsappFormat } from '../../utils/treatStrings';
 import styles, { Theme } from '../../global';
@@ -21,7 +20,7 @@ import { Header } from '../../components/Header';
 import { Input, CircularButton } from '../../components/Elements';
 
 const FirstStep = () => {
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
   const { params = {} } = useRoute();
 
   const [name, setName] = useState('');
@@ -53,7 +52,7 @@ const FirstStep = () => {
         duration: 300,
         useNativeDriver: false,
       }).start(() => {
-        navigation.navigate('SecondStep', { name, whatsapp });
+        navigate('SecondStep', { name, whatsapp });
         setButtonStatus(null);
       });
     }
@@ -65,6 +64,8 @@ const FirstStep = () => {
       useNativeDriver: false,
     }).start();
   };
+
+  useEffect(() => SplashScreen.hide(), []);
 
   useEffect(() => {
     navigateToSecondStep();
