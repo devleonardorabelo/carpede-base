@@ -227,6 +227,11 @@ export default StyleSheet.create({
     fontSize: 20,
     color: Theme.color2,
   },
+  boldSubtitle: {
+    fontFamily: 'Montserrat SemiBold',
+    fontSize: 20,
+    color: Theme.color2,
+  },
   bold: {
     fontFamily: 'Montserrat Bold',
     fontSize: 16,
@@ -253,9 +258,11 @@ export default StyleSheet.create({
 
   // STRUCTURE
   header: {
-    paddingVertical: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     minHeight: 64,
-    paddingTop: StatusBar.currentHeight,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
   },
   floatHeader: {
     position: 'absolute',
@@ -268,15 +275,16 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Theme.background1,
-    paddingHorizontal: 16,
   },
   row: {
     flexDirection: 'row',
     marginBottom: 16,
+    paddingHorizontal: 16,
   },
   column: {
     flexDirection: 'column',
     marginBottom: 32,
+    paddingHorizontal: 16,
   },
   scrollVertical: {
     position: 'absolute',
@@ -330,6 +338,21 @@ export default StyleSheet.create({
     color: Theme.color1,
     backgroundColor: Theme.background2,
   },
+  searchBox: {
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: Theme.background2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  searchInput: {
+    fontFamily: 'Montserrat Medium',
+    fontSize: 16,
+    color: Theme.color1,
+    flexGrow: 1,
+  },
+  searchButton: {},
   button: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -343,5 +366,49 @@ export default StyleSheet.create({
     width: 72,
     borderRadius: 100,
     marginVertical: 16,
+  },
+
+  // SLIDES
+  slideHorizontal: {
+    paddingLeft: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Theme.background2,
+    marginBottom: 16,
+  },
+  slideItem: {
+    alignContent: 'center',
+    paddingVertical: 16,
+    marginRight: 16,
+  },
+  slideItemImage: {
+    width: 130,
+    height: 100,
+    borderRadius: 8,
+    marginBottom: 4,
+  },
+  slideLargeItemImage: {
+    width: 200,
+    height: 100,
+    borderRadius: 8,
+    marginBottom: 4,
+  },
+  listItems: {
+    marginTop: 16,
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    paddingBottom: 16,
+    marginBottom: 16,
+    borderBottomColor: Theme.background2,
+  },
+  infoItem: {
+    flexShrink: 1,
+  },
+  imageItem: {
+    height: 100,
+    width: 100,
+    borderRadius: 8,
   },
 });

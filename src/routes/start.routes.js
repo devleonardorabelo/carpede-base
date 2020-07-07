@@ -15,9 +15,9 @@ const StartRoutes = () => (
           cardStyle: {
             transform: [
               {
-                translateY: current.progress.interpolate({
+                translateX: current.progress.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [-layouts.screen.height, 0],
+                  outputRange: [layouts.screen.width, 0],
                 }),
               },
             ],

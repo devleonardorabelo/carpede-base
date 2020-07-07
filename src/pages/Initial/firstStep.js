@@ -4,13 +4,12 @@ import {
   Text,
   StatusBar,
   View,
-  Animated,
   Keyboard,
   PermissionsAndroid,
 } from 'react-native';
 import NavigationBarColor from 'react-native-navigation-bar-color';
 import { format } from '@buttercup/react-formatted-input';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 
 import { whatsappFormat } from '../../utils/treatStrings';
@@ -21,17 +20,13 @@ import { Input, CircularButton } from '../../components/Elements';
 
 const FirstStep = () => {
   const { navigate } = useNavigation();
-  const { params = {} } = useRoute();
-
   const [name, setName] = useState('');
   const [whatsapp, setWhatsapp] = useState({
     raw: '',
     formatted: '',
   });
-  const [buttonVisibility, setButtonVisibility] = useState(false);
+  const [visibleButton, setVisibleButton] = useState(false);
   const [buttonStatus, setButtonStatus] = useState('disabled');
-
-  const opacityContainer = new Animated.Value(1);
 
   const formatWhatsapp = (number) =>
     setWhatsapp(format(number, whatsappFormat));
@@ -43,47 +38,24 @@ const FirstStep = () => {
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
       );
       if (getPermission === 'denied') {
-        setButtonVisibility(true);
+        setVisibleButton(true);
         setButtonStatus(null);
         return;
       }
-      Animated.timing(opacityContainer, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: false,
-      }).start(() => {
-        navigate('SecondStep', { name, whatsapp });
-        setButtonStatus(null);
-      });
+      navigate('SecondStep', { name, whatsapp });
+      setButtonStatus(null);
+      setTimeout(() => setVisibleButton(true), 1000);
     }
   };
-  const showFirstStep = async () => {
-    Animated.timing(opacityContainer, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-  };
 
-  useEffect(() => SplashScreen.hide(), []);
+  useEffect(() => {
+    SplashScreen.hide();
+    NavigationBarColor(Theme.background1, Theme.mode !== 'dark');
+  }, []);
 
   useEffect(() => {
     navigateToSecondStep();
   }, [name, whatsapp]);
-
-  useEffect(() => {
-    showFirstStep();
-    if (params.back) {
-      opacityContainer.setValue(0);
-      showFirstStep();
-      setButtonVisibility(true);
-    }
-    params.back = false;
-  }, [params.back]);
-
-  useEffect(() => {
-    NavigationBarColor(Theme.background1, Theme.mode !== 'dark');
-  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -91,14 +63,14 @@ const FirstStep = () => {
         backgroundColor={Theme.background1}
         barStyle={Theme.mode === 'dark' ? 'light-content' : 'dark-content'}
       />
-      <Animated.View style={{ opacity: opacityContainer }}>
-        <Header ocult />
-        <View style={styles.column}>
-          <Text style={styles.title}>Seja bem-vindo(a)</Text>
-          <Text style={styles.subtitle}>
-            Primeiro precisamos saber mais sobre você!
-          </Text>
-        </View>
+      <Header ocult />
+      <View style={styles.column}>
+        <Text style={styles.title}>Seja bem-vindo(a)</Text>
+        <Text style={styles.subtitle}>
+          Primeiro precisamos saber mais sobre você!
+        </Text>
+      </View>
+      <View style={styles.column}>
         <Input label="Qual o seu nome?" action={(e) => setName(e)} />
         <Input
           label="Qual o seu Whatsapp?"
@@ -107,7 +79,7 @@ const FirstStep = () => {
           maxLength={16}
           defaultValue={whatsapp.formatted}
         />
-        {buttonVisibility && (
+        {visibleButton && (
           <CircularButton
             style={{ alignSelf: 'center' }}
             icon="chevron-right"
@@ -115,7 +87,7 @@ const FirstStep = () => {
             status={buttonStatus}
           />
         )}
-      </Animated.View>
+      </View>
     </ScrollView>
   );
 };

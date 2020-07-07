@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import MI from 'react-native-vector-icons/MaterialCommunityIcons';
+import FE from 'react-native-vector-icons/Feather';
 
 import Gradient from 'react-native-linear-gradient';
 
@@ -33,6 +34,18 @@ export const Input = ({
     />
   </View>
 );
+export const SearchInput = ({ placeholder, action }) => (
+  <View style={styles.searchBox}>
+    <TextInput
+      style={styles.searchInput}
+      placeholder={placeholder}
+      action={action}
+    />
+    <TouchableOpacity style={styles.searchButton}>
+      <FE name="search" size={28} color={Theme.background4} />
+    </TouchableOpacity>
+  </View>
+);
 export const Button = ({ title, action, status, disabledTitle, style }) => {
   const [backgroundColor, setBackgroundColor] = useState([
     Theme.background3,
@@ -44,7 +57,7 @@ export const Button = ({ title, action, status, disabledTitle, style }) => {
     switch (status) {
       case 'loading':
         setBackgroundColor([Theme.background4, Theme.background3]);
-        setContent(<ActivityIndicator size={32} color="#FFFFFF" />);
+        setContent(<ActivityIndicator size={28} color="#FFFFFF" />);
         setDisabled(true);
         break;
       case 'disabled':
@@ -89,17 +102,17 @@ export const CircularButton = ({ action, status, style, icon, center }) => {
     switch (status) {
       case 'loading':
         setBackgroundColor([Theme.background4, Theme.background3]);
-        setContent(<ActivityIndicator size={32} color="#FFFFFF" />);
+        setContent(<ActivityIndicator size={28} color="#FFFFFF" />);
         setDisabled(true);
         break;
       case 'disabled':
         setBackgroundColor([Theme.background2, Theme.background2]);
-        setContent(<MI name="check" size={32} color="#FFFFFF" />);
+        setContent(<MI name="check" size={28} color="#FFFFFF" />);
         setDisabled(true);
         break;
       default:
         setBackgroundColor([Theme.background3, Theme.background4]);
-        setContent(<MI name={icon} size={32} color="#FFFFFF" />);
+        setContent(<MI name={icon} size={28} color="#FFFFFF" />);
         setDisabled(false);
         break;
     }

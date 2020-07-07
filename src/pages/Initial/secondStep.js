@@ -109,7 +109,7 @@ const SecondStep = () => {
             onLayout={(e) => setFormHeight(e.nativeEvent.layout.height)}
           >
             <Input label="Endereço" action={(e) => setAddress(e)} />
-            <View style={styles.row}>
+            <View style={{ flexDirection: 'row' }}>
               <Input
                 label="Complemento"
                 style={{ flexGrow: 1, marginRight: 16 }}

@@ -1,9 +1,17 @@
 export const treatPrice = (price) => {
   const treated = Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BR',
+    currency: 'BRL',
   }).format(price);
   return treated;
+};
+
+export const minimizeText = (text) => {
+  if (text.length > 75) {
+    const textCut = `${text.match(/^[\s\S]{0,75}/)}...`;
+    return textCut;
+  }
+  return text;
 };
 
 export const whatsappFormat = [
