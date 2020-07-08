@@ -1,21 +1,22 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import {
-  SafeAreaView,
+  Modal,
   View,
   Image,
   Text,
   FlatList,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
 import MI from 'react-native-vector-icons/MaterialCommunityIcons';
-import Animated from 'react-native-reanimated';
 import { treatPrice, minimizeText } from '../utils/treatStrings';
 
 import styles, { Theme } from '../global';
 
-export const Map = ({ initialRegion, coordinate, onDragEnd }) => (
+export const Map = ({ initialRegion, coordinate, onDragEnd, noTips }) => (
   <MapView
     customMapStyle={Theme.mapStyle}
     style={{ flex: 1 }}
@@ -24,67 +25,107 @@ export const Map = ({ initialRegion, coordinate, onDragEnd }) => (
   >
     <Marker coordinate={coordinate} onDragEnd={onDragEnd} draggable>
       <View style={{ alignItems: 'center' }}>
-        <Text
-          style={[
-            styles.bold,
-            {
-              backgroundColor: Theme.background3,
-              padding: 4,
-              borderRadius: 4,
-              color: '#FFFFFF',
-            },
-          ]}
-        >
-          Segure e arraste
-        </Text>
-        <MI name="map-marker" size={72} color={Theme.background3} />
+        {!noTips && (
+          <Text
+            style={[
+              styles.bold,
+              {
+                backgroundColor: Theme.background3,
+                padding: 4,
+                borderRadius: 4,
+                color: '#FFFFFF',
+              },
+            ]}
+          >
+            Segure e arraste
+          </Text>
+        )}
+        <MI name="map-marker" size={64} color={Theme.background3} />
       </View>
     </Marker>
   </MapView>
 );
-export const Modal = ({ children, show, image }) =>
-  show && (
-    <SafeAreaView style={styles.backgroundModal}>
+export const ModalView = ({ children, show, image, style }) => (
+  <Modal animationType="fade" transparent visible={show}>
+    <View style={styles.backgroundModal}>
       {image && (
         <Image source={image} style={styles.imageModal} resizeMode="contain" />
       )}
-      <View style={[styles.modal, image && { paddingTop: 50 }]}>
+      <View style={[styles.modal, image && { paddingTop: 50 }, style]}>
         {children}
       </View>
-    </SafeAreaView>
-  );
-export const SlideHorizontal = ({ data, large, title }) => (
+    </View>
+  </Modal>
+);
+export const SlideHorizontal = ({ data, large, name, type }) => (
   <View style={styles.slideHorizontal}>
-    <Text style={styles.boldSubtitle}>{title}</Text>
-    <FlatList
-      data={data}
-      keyExtractor={(item) => String(item._id)}
-      showsHorizontalScrollIndicator={false}
-      renderItem={({ item }) => (
-        <SlideItem
-          image={item.image}
-          title={item.name}
-          large={large}
-          price={item.price}
-        />
-      )}
-      horizontal
-    />
+    <Text style={[styles.boldSubtitle, { paddingLeft: 16 }]}>{name}</Text>
+    {data.length > 0 ? (
+      <FlatList
+        style={{ paddingLeft: 16 }}
+        data={data}
+        keyExtractor={(item) => String(item._id)}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <SlideItem
+            id={item._id}
+            image={item.image}
+            name={item.name}
+            large={large}
+            price={item.price}
+            type={type}
+          />
+        )}
+        ListFooterComponent={<View style={{ width: 16 }} />}
+        horizontal
+      />
+    ) : (
+      <Text>Carregando</Text>
+    )}
   </View>
 );
-export const SlideItem = ({ action, image, title, large, price }) => (
-  <TouchableOpacity style={styles.slideItem} onPress={action}>
-    {image && (
-      <Image
-        style={large ? styles.slideLargeItemImage : styles.slideItemImage}
-        source={{ uri: image }}
-        resizeMode="cover"
-      />
-    )}
-    <Text style={styles.semiBold}>{title}</Text>
-    {price && <Text style={styles.medium}>{treatPrice(price)}</Text>}
-  </TouchableOpacity>
-);
+export const SlideItem = ({ id, image, name, large, price, type }) => {
+  const navigation = useNavigation();
+  return (
+    <>
+      {type === 'category' && (
+        <TouchableOpacity
+          style={styles.slideItem}
+          onPress={() =>
+            navigation.navigate('Products', { id, image, name, price })
+          }
+        >
+          {image && (
+            <Image
+              style={styles.slideItemImage}
+              source={{ uri: image }}
+              resizeMode="cover"
+            />
+          )}
+          <Text style={styles.semiBold}>{name}</Text>
+        </TouchableOpacity>
+      )}
+      {type === 'product' && (
+        <TouchableOpacity
+          style={styles.slideItem}
+          onPress={() =>
+            navigation.navigate('Products', { id, image, name, price })
+          }
+        >
+          {image && (
+            <Image
+              style={large ? styles.slideLargeItemImage : styles.slideItemImage}
+              source={{ uri: image }}
+              resizeMode="cover"
+            />
+          )}
+          <Text style={styles.semiBold}>{name}</Text>
+          {price && <Text style={styles.medium}>{treatPrice(price)}</Text>}
+        </TouchableOpacity>
+      )}
+    </>
+  );
+};
 export const ListItems = ({ data, style }) => (
   <Animated.View style={[style, { flex: 1 }]}>
     <FlatList

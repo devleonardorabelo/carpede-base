@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 // eslint-disable-next-line no-unused-vars
 const LightTheme = {
@@ -259,9 +259,10 @@ export default StyleSheet.create({
   // STRUCTURE
   header: {
     flexDirection: 'row',
+    alignContent: 'center',
     justifyContent: 'space-between',
-    minHeight: 64,
-    paddingVertical: 16,
+    paddingTop: 16,
+    paddingBottom: 8,
     paddingHorizontal: 16,
   },
   floatHeader: {
@@ -315,8 +316,7 @@ export default StyleSheet.create({
     borderRadius: 24,
     minHeight: 100,
     minWidth: 100,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    padding: 16,
   },
 
   // INPUTS
@@ -367,10 +367,19 @@ export default StyleSheet.create({
     borderRadius: 100,
     marginVertical: 16,
   },
+  outlineButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 48,
+    borderRadius: 8,
+    borderWidth: 3,
+    borderColor: Theme.background3,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+  },
 
   // SLIDES
   slideHorizontal: {
-    paddingLeft: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: Theme.background2,
     marginBottom: 16,
@@ -384,16 +393,17 @@ export default StyleSheet.create({
     width: 130,
     height: 100,
     borderRadius: 8,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   slideLargeItemImage: {
     width: 200,
     height: 100,
     borderRadius: 8,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   listItems: {
     marginTop: 16,
+    paddingHorizontal: 16,
   },
   item: {
     flexDirection: 'row',

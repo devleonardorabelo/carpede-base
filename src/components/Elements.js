@@ -46,7 +46,14 @@ export const SearchInput = ({ placeholder, action }) => (
     </TouchableOpacity>
   </View>
 );
-export const Button = ({ title, action, status, disabledTitle, style }) => {
+export const Button = ({
+  title,
+  action,
+  status,
+  disabledTitle,
+  doneTitle,
+  style,
+}) => {
   const [backgroundColor, setBackgroundColor] = useState([
     Theme.background3,
     Theme.background4,
@@ -68,6 +75,13 @@ export const Button = ({ title, action, status, disabledTitle, style }) => {
           </Text>
         );
         setDisabled(true);
+        break;
+      case 'done':
+        setBackgroundColor([Theme.background3, Theme.background4]);
+        setContent(
+          <Text style={[styles.bold, { color: '#FFFFFF' }]}>{doneTitle}</Text>
+        );
+        setDisabled(false);
         break;
       default:
         setBackgroundColor([Theme.background3, Theme.background4]);
@@ -134,3 +148,13 @@ export const CircularButton = ({ action, status, style, icon, center }) => {
     </TouchableOpacity>
   );
 };
+export const OutlineButton = ({ action, icon, title }) => (
+  <TouchableOpacity style={styles.outlineButton} onPress={action}>
+    <MI name={icon} size={28} color={Theme.background3} />
+    <Text
+      style={[styles.semiBold, { marginLeft: 16, color: Theme.background3 }]}
+    >
+      {title}
+    </Text>
+  </TouchableOpacity>
+);
