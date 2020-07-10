@@ -64,7 +64,7 @@ const Profile = () => {
     <>
       <SafeAreaView style={styles.container}>
         <Header iconLeft="arrow-left" actionLeft={goBack} />
-        <ScrollView>
+        <ScrollView style={{ paddingTop: 16 }}>
           <View style={styles.column}>
             <Text style={styles.title}>Sobre você</Text>
             <Text style={styles.subtitle}>Suas informações de Entrega</Text>

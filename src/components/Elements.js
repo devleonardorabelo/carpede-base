@@ -34,6 +34,31 @@ export const Input = ({
     />
   </View>
 );
+export const TextArea = ({
+  label,
+  placeholder,
+  action,
+  keyboardType,
+  maxLength,
+  defaultValue,
+  style,
+}) => (
+  <View style={[styles.groupInput, style]}>
+    <Text style={styles.labelInput}>{label}</Text>
+    <TextInput
+      numberOfLines={10}
+      style={styles.textArea}
+      placeholder={placeholder}
+      onChangeText={action}
+      keyboardType={keyboardType || 'default'}
+      maxLength={maxLength || 100}
+      defaultValue={defaultValue}
+      multiline
+      returnKeyType="done"
+      blurOnSubmit
+    />
+  </View>
+);
 export const SearchInput = ({ placeholder, action }) => (
   <View style={styles.searchBox}>
     <TextInput
@@ -91,7 +116,7 @@ export const Button = ({
         setDisabled(false);
         break;
     }
-  }, [status]);
+  }, [status, title]);
   return (
     <TouchableOpacity onPress={action} disabled={disabled}>
       <Gradient
@@ -157,4 +182,15 @@ export const OutlineButton = ({ action, icon, title }) => (
       {title}
     </Text>
   </TouchableOpacity>
+);
+export const QuantityButton = ({ actionLeft, actionRight, quantity }) => (
+  <View style={styles.quantityButtonGroup}>
+    <TouchableOpacity style={styles.quantityButton} onPress={actionLeft}>
+      <MI name="minus" size={28} color={Theme.color3} />
+    </TouchableOpacity>
+    <Text style={styles.quantityInput}>{quantity}</Text>
+    <TouchableOpacity style={styles.quantityButton} onPress={actionRight}>
+      <MI name="plus" size={28} color={Theme.color3} />
+    </TouchableOpacity>
+  </View>
 );

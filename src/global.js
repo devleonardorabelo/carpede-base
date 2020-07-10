@@ -252,6 +252,12 @@ export default StyleSheet.create({
     fontSize: 16,
     color: Theme.color2,
   },
+  ghostText: {
+    backgroundColor: Theme.background2,
+    height: 16,
+    borderRadius: 4,
+    flexGrow: 1,
+  },
   alignCenter: {
     textAlign: 'center',
   },
@@ -259,11 +265,12 @@ export default StyleSheet.create({
   // STRUCTURE
   header: {
     flexDirection: 'row',
-    alignContent: 'center',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 16,
-    paddingBottom: 8,
+    paddingVertical: 16,
     paddingHorizontal: 16,
+    borderBottomColor: Theme.background2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   floatHeader: {
     position: 'absolute',
@@ -318,6 +325,47 @@ export default StyleSheet.create({
     minWidth: 100,
     padding: 16,
   },
+  image: {
+    width: '100%',
+    height: 200,
+    marginBottom: 24,
+  },
+  viewOrder: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: Theme.background4,
+  },
+  headerOrder: {
+    opacity: 1,
+    flexDirection: 'row',
+    backgroundColor: Theme.background4,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+  },
+  headerBodyOrder: {
+    padding: 16,
+    backgroundColor: Theme.background1,
+  },
+  bodyOrder: {
+    backgroundColor: Theme.background1,
+    height: '100%',
+  },
+  footerOrder: {
+    padding: 16,
+  },
+  orderItem: {
+    paddingVertical: 12,
+    borderBottomColor: Theme.background2,
+    borderBottomWidth: 1,
+  },
+  thumbnailItem: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+  },
 
   // INPUTS
   groupInput: {
@@ -330,6 +378,17 @@ export default StyleSheet.create({
     color: Theme.color3,
   },
   input: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    fontFamily: 'Montserrat Medium',
+    fontSize: 16,
+    color: Theme.color1,
+    backgroundColor: Theme.background2,
+  },
+  textArea: {
+    textAlignVertical: 'top',
+    height: 80,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -377,6 +436,27 @@ export default StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 16,
   },
+  quantityButtonGroup: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  quantityButton: {
+    borderWidth: 3,
+    borderColor: Theme.background2,
+    height: 48,
+    width: 48,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  quantityInput: {
+    textAlign: 'center',
+    fontFamily: 'Montserrat Medium',
+    fontSize: 20,
+    width: 50,
+    textAlignVertical: 'center',
+  },
 
   // SLIDES
   slideHorizontal: {
@@ -402,7 +482,7 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   listItems: {
-    marginTop: 16,
+    paddingTop: 16,
     paddingHorizontal: 16,
   },
   item: {
@@ -420,5 +500,24 @@ export default StyleSheet.create({
     height: 100,
     width: 100,
     borderRadius: 8,
+  },
+
+  // MORE
+
+  hairline: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Theme.background2,
+  },
+  badge: {
+    position: 'absolute',
+    backgroundColor: '#FFFFFF',
+    width: 20,
+    borderRadius: 100,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontFamily: 'Montserrat Bold',
+    left: 16,
+    top: 14,
+    color: Theme.background4,
   },
 });

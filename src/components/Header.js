@@ -19,7 +19,9 @@ export const Header = ({
         <TouchableOpacity onPress={actionLeft}>
           <MI name={iconLeft} size={28} color={Theme.color1} />
         </TouchableOpacity>
-        <Text style={styles.boldSubtitle}>{title}</Text>
+        <Text style={[styles.medium, { textTransform: 'uppercase' }]}>
+          {title}
+        </Text>
         {iconRight ? (
           <TouchableOpacity onPress={actionRight}>
             <MI name={iconRight} size={28} color={Theme.color1} />
