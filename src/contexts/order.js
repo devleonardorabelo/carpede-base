@@ -5,20 +5,20 @@ export const OrderContext = createContext();
 export const OrderProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
 
-  const addProduct = (product) => setProducts([...products, product]);
+  const addProduct = (item) => setProducts([...products, item]);
 
-  const editProduct = (product) => {
+  const editProduct = (item) => {
     const index = products.findIndex(
-      (obj) => obj.product.idSelect === product.product.idSelect
+      (obj) => obj.product.idSelect === item.product.idSelect
     );
-    products[index].quantity = product.quantity;
-    products[index].notice = product.notice;
+    products[index].quantity = item.quantity;
+    products[index].notice = item.notice;
     setProducts([...products]);
   };
 
-  const removeProduct = (product) => {
+  const removeProduct = (item) => {
     const index = products.findIndex(
-      (obj) => obj.product.idSelect === product.product.idSelect
+      (obj) => obj.product.idSelect === item.product.idSelect
     );
     products.splice(index, 1);
     setProducts([...products]);
