@@ -35,7 +35,12 @@ const Home = () => {
 
   return (
     <>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={[
+          styles.container,
+          orderProducts.length && { paddingBottom: 60 },
+        ]}
+      >
         <StatusBar
           backgroundColor={Theme.background1}
           barStyle={Theme.mode === 'dark' ? 'light-content' : 'dark-content'}
