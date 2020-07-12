@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import OrderContext from '../../contexts/order';
 import api from '../../services/api';
 
 import styles from '../../global';
 import { ListItems } from '../../components/Lists';
 import { Header } from '../../components/Header';
+import { ViewOrder } from '../../components/Footer';
 
 const Products = () => {
   const { goBack } = useNavigation();
+  const { products: orderProducts } = useContext(OrderContext);
+
   const { params } = useRoute();
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
@@ -24,9 +28,7 @@ const Products = () => {
     });
 
     setProducts([...products, ...data]);
-
     setPage(page + 1);
-
     setLoading(false);
   };
 
@@ -35,9 +37,12 @@ const Products = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, orderProducts.length && { paddingBottom: 60 }]}
+    >
       <Header iconLeft="arrow-left" actionLeft={goBack} title={params.name} />
       <ListItems data={products} onEndReached={loadProducts} />
+      <ViewOrder items={orderProducts} active={!!orderProducts.length} />
     </SafeAreaView>
   );
 };
