@@ -8,7 +8,7 @@ import imgSmile from '../../assets/illustrations/smile.png';
 import styles, { Theme } from '../../global';
 import { Header } from '../../components/Header';
 import { Input, CircularButton, Button } from '../../components/Elements';
-import { Map, Modal } from '../../components/Structures';
+import { Map, ModalView } from '../../components/Structures';
 
 const SecondStep = () => {
   const { navigate } = useNavigation();
@@ -68,7 +68,7 @@ const SecondStep = () => {
   const handleSignUp = async () => {
     await signUp({
       name: params.name,
-      whatsapp: params.name,
+      whatsapp: params.whatsapp,
       address,
       complement,
       number,
@@ -109,7 +109,7 @@ const SecondStep = () => {
             onLayout={(e) => setFormHeight(e.nativeEvent.layout.height)}
           >
             <Input label="Endereço" action={(e) => setAddress(e)} />
-            <View style={styles.row}>
+            <View style={{ flexDirection: 'row' }}>
               <Input
                 label="Complemento"
                 style={{ flexGrow: 1, marginRight: 16 }}
@@ -130,7 +130,7 @@ const SecondStep = () => {
           </View>
         </Animated.View>
       </SafeAreaView>
-      <Modal image={imgSmile} show={showModal} center>
+      <ModalView image={imgSmile} show={showModal} center>
         <Text style={[styles.subtitle, styles.alignCenter]}>
           Olá, {params.name}.
         </Text>
@@ -142,7 +142,7 @@ const SecondStep = () => {
           chamar!
         </Text>
         <CircularButton icon="chevron-right" center action={handleSignUp} />
-      </Modal>
+      </ModalView>
     </>
   );
 };
