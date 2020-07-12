@@ -436,6 +436,11 @@ export default StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 16,
   },
+  linkButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   quantityButtonGroup: {
     flexDirection: 'row',
     justifyContent: 'center',

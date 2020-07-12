@@ -173,6 +173,12 @@ export const CircularButton = ({ action, status, style, icon, center }) => {
     </TouchableOpacity>
   );
 };
+export const LinkButton = ({ action, title, icon }) => (
+  <TouchableOpacity style={styles.linkButton} onPress={action}>
+    <MI style={{ marginRight: 8 }} name={icon} size={28} color={Theme.color2} />
+    <Text style={styles.medium}>{title}</Text>
+  </TouchableOpacity>
+);
 export const OutlineButton = ({ action, icon, title }) => (
   <TouchableOpacity style={styles.outlineButton} onPress={action}>
     <MI name={icon} size={28} color={Theme.background3} />

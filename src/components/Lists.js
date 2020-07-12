@@ -138,40 +138,63 @@ export const ListItems = ({ data, onEndReached }) => {
     </>
   );
 };
-export const OrderItem = ({ data }) => (
-  <View style={[styles.orderItem]}>
-    <View style={{ flexDirection: 'row' }}>
-      <Image
-        style={[styles.thumbnailItem, { marginRight: 16 }]}
-        source={{ uri: data.product.image }}
-        resizeMode="cover"
-      />
-      <View>
-        <Text style={styles.medium}>
-          {`${data.quantity}x ${data.product.name}`}
-        </Text>
-        <Text style={styles.light}>
-          {treatPrice(data.product.price * data.quantity)}
-        </Text>
-        {data.notice !== '' && <Text style={styles.light}>{data.notice}</Text>}
-      </View>
-      <View
-        style={{
-          flexGrow: 1,
-          alignItems: 'flex-end',
-          justifyContent: 'center',
-        }}
-      >
-        <MI
-          style={{ marginLeft: 8 }}
-          name="pencil"
-          size={20}
-          color={Theme.background3}
+export const OrderItem = ({ data }) => {
+  const { navigate } = useNavigation();
+
+  return (
+    <TouchableOpacity
+      style={[styles.orderItem]}
+      onPress={() =>
+        navigate('Show', {
+          id: data.product._id,
+          idSelect: data.product.idSelect,
+          image: data.product.image,
+          name: data.product.name,
+          description: data.product.description,
+          price: data.product.price,
+          notice: data.notice,
+          quantity: data.quantity,
+        })
+      }
+    >
+      <View style={{ flexDirection: 'row' }}>
+        <Image
+          style={[styles.thumbnailItem, { marginRight: 16 }]}
+          source={{ uri: data.product.image }}
+          resizeMode="cover"
         />
+        <View style={{ flexGrow: 1 }}>
+          <Text style={styles.medium}>
+            {`${data.quantity}x ${data.product.name}`}
+          </Text>
+          <Text style={styles.light}>
+            {treatPrice(data.product.price * data.quantity)}
+          </Text>
+          {data.notice !== '' && (
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={[styles.light, { flexWrap: 'wrap', flex: 1 }]}>
+                {data.notice}
+              </Text>
+            </View>
+          )}
+        </View>
+        <View
+          style={{
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+          }}
+        >
+          <MI
+            style={{ marginLeft: 8 }}
+            name="pencil"
+            size={20}
+            color={Theme.background3}
+          />
+        </View>
       </View>
-    </View>
-  </View>
-);
+    </TouchableOpacity>
+  );
+};
 export const ListOrderItems = ({ data }) => {
   return (
     <FlatList
