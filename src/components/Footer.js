@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,11 +8,8 @@ import {
 } from 'react-native';
 import FE from 'react-native-vector-icons/Feather';
 import MI from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  TouchableWithoutFeedback,
-  PanGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import Gesture from 'react-native-swipe-gestures';
 
 import { treatPrice } from '../utils/treatStrings';
 
@@ -20,25 +17,11 @@ import styles, { Theme } from '../global';
 import { ListOrderItems } from './Lists';
 import { Button } from './Elements';
 
-export const ViewOrder = ({ active, items, action }) => {
-  const [amount, setAmount] = useState(0);
+export const ViewOrder = ({ active, items, amount, action }) => {
   const [isAnimated, setIsAnimated] = useState(false);
-
   const refHeight = useRef(new Animated.Value(60)).current;
   const refOpacityHeader = useRef(new Animated.Value(1)).current;
   const refOpacityBody = useRef(new Animated.Value(0)).current;
-  let offset = 0;
-
-  const animatedEvent = Animated.event(
-    [
-      {
-        nativeEvent: {
-          translationY: refHeight,
-        },
-      },
-    ],
-    { useNativeDriver: false }
-  );
 
   const showOrder = () => {
     Animated.timing(refOpacityHeader, {
@@ -47,13 +30,10 @@ export const ViewOrder = ({ active, items, action }) => {
       useNativeDriver: false,
     }).start();
     Animated.timing(refHeight, {
-      toValue: -Dimensions.get('window').height,
+      toValue: Dimensions.get('window').height,
       duration: 500,
       useNativeDriver: false,
-    }).start(() => {
-      refHeight.setOffset(offset);
-      refHeight.setValue(0);
-    });
+    }).start();
     Animated.timing(refOpacityBody, {
       toValue: 1,
       duration: 500,
@@ -69,13 +49,10 @@ export const ViewOrder = ({ active, items, action }) => {
       useNativeDriver: false,
     }).start();
     Animated.timing(refHeight, {
-      toValue: Dimensions.get('window').height,
+      toValue: 60,
       duration: 500,
       useNativeDriver: false,
-    }).start(() => {
-      refHeight.setOffset(offset);
-      refHeight.setValue(60);
-    });
+    }).start();
     Animated.timing(refOpacityBody, {
       toValue: 0,
       duration: 300,
@@ -83,47 +60,12 @@ export const ViewOrder = ({ active, items, action }) => {
     }).start();
   };
 
-  const onHandlerStateChanged = (event) => {
-    if (event.nativeEvent.oldState === State.ACTIVE) {
-      const { translationY } = event.nativeEvent;
-
-      if (translationY <= -80) {
-        offset = -Dimensions.get('window').height;
-        showOrder();
-      } else {
-        offset = 0;
-        fadeOrder();
-      }
-    }
-  };
-
-  const calculateTotalValue = () => {
-    const calculate = items.reduce(
-      (total, each) => total + each.product.price * each.quantity,
-      0
-    );
-    setAmount(calculate);
-  };
-
-  useEffect(() => {
-    console.log(calculateTotalValue());
-  }, [items]);
   return active ? (
-    <PanGestureHandler
-      onGestureEvent={animatedEvent}
-      onHandlerStateChange={onHandlerStateChanged}
-    >
-      <Animated.View
-        style={[
-          styles.viewOrder,
-          {
-            height: refHeight.interpolate({
-              inputRange: [-Dimensions.get('window').height, 60],
-              outputRange: [Dimensions.get('window').height, 60],
-              extrapolate: 'extend',
-            }),
-          },
-        ]}
+    <Animated.View style={[styles.viewOrder, { height: refHeight }]}>
+      <Gesture
+        style={{ flex: 1 }}
+        onSwipeDown={fadeOrder}
+        onSwipeUp={showOrder}
       >
         {!isAnimated ? (
           <Animated.View style={{ opacity: refOpacityHeader }}>
@@ -155,6 +97,7 @@ export const ViewOrder = ({ active, items, action }) => {
             <TouchableOpacity
               onPress={fadeOrder}
               style={{ width: 28, alignSelf: 'flex-end' }}
+              hitSlop={{ top: 50, bottom: 50, left: 50, right: 50 }}
             >
               <MI name="close" color={Theme.color1} size={28} />
             </TouchableOpacity>
@@ -175,29 +118,19 @@ export const ViewOrder = ({ active, items, action }) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-              }}
-            >
-              <Text style={styles.medium}>Taxa de Entrega: </Text>
-              <Text style={styles.light}>{treatPrice(2)}</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
                 paddingBottom: 16,
                 borderBottomColor: Theme.background2,
                 borderBottomWidth: 1,
                 marginBottom: 16,
               }}
             >
-              <Text style={styles.medium}>Total do pedido: </Text>
+              <Text style={styles.medium}>Total dos produtos: </Text>
               <Text style={styles.boldSubtitle}>{treatPrice(amount)}</Text>
             </View>
             <Button title="Confirmar Pedido" action={action} />
           </View>
         </Animated.View>
-      </Animated.View>
-    </PanGestureHandler>
+      </Gesture>
+    </Animated.View>
   ) : null;
 };

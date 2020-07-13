@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import OrderContext from '../../contexts/order';
-import api from '../../services/api';
+import { api } from '../../services/api';
 
 import styles from '../../global';
 import { ListItems } from '../../components/Lists';
@@ -10,8 +10,10 @@ import { Header } from '../../components/Header';
 import { ViewOrder } from '../../components/Footer';
 
 const Products = () => {
-  const { goBack } = useNavigation();
-  const { products: orderProducts } = useContext(OrderContext);
+  const { goBack, navigate } = useNavigation();
+  const { products: orderProducts, calculateTotalValue } = useContext(
+    OrderContext
+  );
 
   const { params } = useRoute();
   const [products, setProducts] = useState([]);
@@ -42,7 +44,12 @@ const Products = () => {
     >
       <Header iconLeft="arrow-left" actionLeft={goBack} title={params.name} />
       <ListItems data={products} onEndReached={loadProducts} />
-      <ViewOrder items={orderProducts} active={!!orderProducts.length} />
+      <ViewOrder
+        items={orderProducts}
+        amount={calculateTotalValue()}
+        active={!!orderProducts.length}
+        action={() => navigate('Delivery')}
+      />
     </SafeAreaView>
   );
 };

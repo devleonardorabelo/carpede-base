@@ -270,7 +270,6 @@ export default StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderBottomColor: Theme.background2,
-    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   floatHeader: {
     position: 'absolute',
@@ -366,6 +365,11 @@ export default StyleSheet.create({
     height: 48,
     borderRadius: 8,
   },
+  spaceBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 
   // INPUTS
   groupInput: {
@@ -431,7 +435,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     height: 48,
     borderRadius: 8,
-    borderWidth: 3,
+    borderWidth: 1,
     borderColor: Theme.background3,
     marginBottom: 16,
     paddingHorizontal: 16,

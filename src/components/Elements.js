@@ -21,16 +21,19 @@ export const Input = ({
   maxLength,
   defaultValue,
   style,
+  focus,
+  centralized,
 }) => (
   <View style={[styles.groupInput, style]}>
     <Text style={styles.labelInput}>{label}</Text>
     <TextInput
-      style={styles.input}
+      style={[styles.input, centralized && { textAlign: 'center' }]}
       placeholder={placeholder}
       onChangeText={action}
       keyboardType={keyboardType || 'default'}
       maxLength={maxLength || 50}
       defaultValue={defaultValue}
+      autoFocus={focus || false}
     />
   </View>
 );
@@ -179,11 +182,28 @@ export const LinkButton = ({ action, title, icon }) => (
     <Text style={styles.medium}>{title}</Text>
   </TouchableOpacity>
 );
-export const OutlineButton = ({ action, icon, title }) => (
-  <TouchableOpacity style={styles.outlineButton} onPress={action}>
-    <MI name={icon} size={28} color={Theme.background3} />
+export const OutlineButton = ({ active, action, icon, title, style }) => (
+  <TouchableOpacity
+    style={[
+      styles.outlineButton,
+      style,
+      active
+        ? { borderColor: Theme.background4 }
+        : { borderColor: Theme.color3 },
+    ]}
+    onPress={action}
+  >
+    <MI
+      name={icon}
+      size={28}
+      color={active ? Theme.background4 : Theme.color3}
+    />
     <Text
-      style={[styles.semiBold, { marginLeft: 16, color: Theme.background3 }]}
+      style={[
+        styles.semiBold,
+        { marginLeft: 16 },
+        active ? { color: Theme.background4 } : { color: Theme.color3 },
+      ]}
     >
       {title}
     </Text>

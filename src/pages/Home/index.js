@@ -1,9 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Text, SafeAreaView, View, StatusBar, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
+import {
+  Text,
+  SafeAreaView,
+  View,
+  StatusBar,
+  ScrollView,
+  BackHandler,
+} from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import OrderContext from '../../contexts/order';
-import api from '../../services/api';
+import { api } from '../../services/api';
 
 import styles, { Theme } from '../../global';
 import { Header } from '../../components/Header';
@@ -14,7 +21,9 @@ import { ViewOrder } from '../../components/Footer';
 const Home = () => {
   const { navigate } = useNavigation();
   const { customer, signOut } = useContext(AuthContext);
-  const { products: orderProducts } = useContext(OrderContext);
+  const { products: orderProducts, calculateTotalValue } = useContext(
+    OrderContext
+  );
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
 
@@ -32,6 +41,19 @@ const Home = () => {
     loadCategories();
     loadProducts();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        return true;
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
 
   return (
     <>
@@ -79,7 +101,12 @@ const Home = () => {
           />
         </ScrollView>
       </SafeAreaView>
-      <ViewOrder items={orderProducts} active={!!orderProducts.length} />
+      <ViewOrder
+        items={orderProducts}
+        amount={calculateTotalValue()}
+        active={!!orderProducts.length}
+        action={() => navigate('Delivery')}
+      />
     </>
   );
 };
