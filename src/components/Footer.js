@@ -8,8 +8,11 @@ import {
 } from 'react-native';
 import FE from 'react-native-vector-icons/Feather';
 import MI from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import Gesture from 'react-native-swipe-gestures';
+import {
+  TouchableWithoutFeedback,
+  PanGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 
 import { treatPrice } from '../utils/treatStrings';
 
@@ -20,17 +23,22 @@ import { Button } from './Elements';
 export const ViewOrder = ({ active, items, action }) => {
   const [amount, setAmount] = useState(0);
   const [isAnimated, setIsAnimated] = useState(false);
+
   const refHeight = useRef(new Animated.Value(60)).current;
   const refOpacityHeader = useRef(new Animated.Value(1)).current;
   const refOpacityBody = useRef(new Animated.Value(0)).current;
+  let offset = 0;
 
-  const calculateTotalValue = () => {
-    const calculate = items.reduce(
-      (total, each) => total + each.product.price * each.quantity,
-      0
-    );
-    setAmount(calculate);
-  };
+  const animatedEvent = Animated.event(
+    [
+      {
+        nativeEvent: {
+          translationY: refHeight,
+        },
+      },
+    ],
+    { useNativeDriver: false }
+  );
 
   const showOrder = () => {
     Animated.timing(refOpacityHeader, {
@@ -39,10 +47,13 @@ export const ViewOrder = ({ active, items, action }) => {
       useNativeDriver: false,
     }).start();
     Animated.timing(refHeight, {
-      toValue: Dimensions.get('window').height,
+      toValue: -Dimensions.get('window').height,
       duration: 500,
       useNativeDriver: false,
-    }).start();
+    }).start(() => {
+      refHeight.setOffset(offset);
+      refHeight.setValue(0);
+    });
     Animated.timing(refOpacityBody, {
       toValue: 1,
       duration: 500,
@@ -58,10 +69,13 @@ export const ViewOrder = ({ active, items, action }) => {
       useNativeDriver: false,
     }).start();
     Animated.timing(refHeight, {
-      toValue: 60,
+      toValue: Dimensions.get('window').height,
       duration: 500,
       useNativeDriver: false,
-    }).start();
+    }).start(() => {
+      refHeight.setOffset(offset);
+      refHeight.setValue(60);
+    });
     Animated.timing(refOpacityBody, {
       toValue: 0,
       duration: 300,
@@ -69,15 +83,47 @@ export const ViewOrder = ({ active, items, action }) => {
     }).start();
   };
 
+  const onHandlerStateChanged = (event) => {
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      const { translationY } = event.nativeEvent;
+
+      if (translationY <= -80) {
+        offset = -Dimensions.get('window').height;
+        showOrder();
+      } else {
+        offset = 0;
+        fadeOrder();
+      }
+    }
+  };
+
+  const calculateTotalValue = () => {
+    const calculate = items.reduce(
+      (total, each) => total + each.product.price * each.quantity,
+      0
+    );
+    setAmount(calculate);
+  };
+
   useEffect(() => {
     console.log(calculateTotalValue());
   }, [items]);
   return active ? (
-    <Animated.View style={[styles.viewOrder, { height: refHeight }]}>
-      <Gesture
-        style={{ flex: 1 }}
-        onSwipeDown={fadeOrder}
-        onSwipeUp={showOrder}
+    <PanGestureHandler
+      onGestureEvent={animatedEvent}
+      onHandlerStateChange={onHandlerStateChanged}
+    >
+      <Animated.View
+        style={[
+          styles.viewOrder,
+          {
+            height: refHeight.interpolate({
+              inputRange: [-Dimensions.get('window').height, 60],
+              outputRange: [Dimensions.get('window').height, 60],
+              extrapolate: 'extend',
+            }),
+          },
+        ]}
       >
         {!isAnimated ? (
           <Animated.View style={{ opacity: refOpacityHeader }}>
@@ -151,7 +197,7 @@ export const ViewOrder = ({ active, items, action }) => {
             <Button title="Confirmar Pedido" action={action} />
           </View>
         </Animated.View>
-      </Gesture>
-    </Animated.View>
+      </Animated.View>
+    </PanGestureHandler>
   ) : null;
 };
