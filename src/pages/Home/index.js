@@ -25,21 +25,28 @@ const Home = () => {
     OrderContext
   );
   const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [onSale, setOnSale] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
 
   const loadCategories = async () => {
     const { data } = await api.get('/categories');
     if (data) setCategories(data);
   };
 
-  const loadProducts = async () => {
-    const { data } = await api.get('/products');
-    if (data) setProducts(data);
+  const loadOnSale = async () => {
+    const { data } = await api.get('/onsale');
+    if (data) setOnSale(data);
+  };
+
+  const loadBestSellers = async () => {
+    const { data } = await api.get('/bestsellers');
+    if (data) setBestSellers(data);
   };
 
   useEffect(() => {
     loadCategories();
-    loadProducts();
+    loadOnSale();
+    loadBestSellers();
   }, []);
 
   useFocusEffect(
@@ -88,13 +95,13 @@ const Home = () => {
             type="category"
           />
           <SlideHorizontal
-            data={products}
+            data={onSale}
             name="Promoções"
             type="product"
             large
           />
           <SlideHorizontal
-            data={products}
+            data={bestSellers}
             name="Mais vendidos"
             type="product"
             large

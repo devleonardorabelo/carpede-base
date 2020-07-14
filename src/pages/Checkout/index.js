@@ -21,11 +21,12 @@ const Checkout = () => {
   const [value, setValue] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [amount, setAmount] = useState(0);
-  const [change, setChange] = useState(0);
+  const [change, setChange] = useState(null);
   const [method, setMethod] = useState('');
   const [fees, setFees] = useState(0);
   const [delivery, setDelivery] = useState(3);
   const [modalStatus, setModalStatus] = useState(false);
+  const [buttonStatus, setButtonStatus] = useState(null);
 
   useEffect(() => {
     if (method === 'credit') {
@@ -60,7 +61,7 @@ const Checkout = () => {
             action={() => {
               setMethod('');
               setAmount(0);
-              setChange(0);
+              setChange(null);
               setFees(0);
               setPaymentMethod('cash');
               setModalStatus(true);
@@ -73,15 +74,14 @@ const Checkout = () => {
             active={paymentMethod === 'card' && true}
             action={() => {
               setAmount(0);
-              setAmount(0);
-              setChange(0);
+              setChange(null);
               setFees(0);
               setPaymentMethod('card');
               setModalStatus(true);
             }}
           />
         </View>
-        {paymentMethod === 'cash' && amount > 0 && (
+        {paymentMethod === 'cash' && amount > 0 && change !== null && (
           <>
             <Text
               style={[styles.bold, { paddingHorizontal: 16, paddingBottom: 8 }]}
@@ -160,10 +160,15 @@ const Checkout = () => {
           </View>
           <Button
             title="Confirmar Pagamento"
-            status={method !== '' || amount >= value ? null : 'disabled'}
+            status={
+              method !== '' || (amount >= value && change !== null)
+                ? buttonStatus
+                : 'disabled'
+            }
             disabledTitle="Escolha como pagar"
-            action={() => {
-              confirmOrder(
+            action={async () => {
+              setButtonStatus('loading');
+              await confirmOrder(
                 fees,
                 delivery,
                 paymentMethod,
@@ -187,7 +192,9 @@ const Checkout = () => {
               label="Para quanto?"
               keyboardType="numeric"
               placeholder="00,00"
-              action={(e) => setAmount(e)}
+              action={(e) => {
+                if (e > value) setAmount(e);
+              }}
               focus
               centralized
             />
@@ -206,6 +213,7 @@ const Checkout = () => {
               title="Já está trocado"
               action={() => {
                 setAmount(value);
+                setChange(0);
                 setModalStatus(false);
               }}
             />

@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { OrderContext } from '../../contexts/order';
 
 import { treatPrice } from '../../utils/treatStrings';
-import styles from '../../global';
+import styles, { Theme } from '../../global';
 import { Header } from '../../components/Header';
 import {
   QuantityButton,
@@ -28,6 +28,8 @@ const Show = () => {
     name,
     description,
     price,
+    onSale,
+    onSaleValue,
     notice: currentNotice,
     quantity: currentQuantity,
   } = params;
@@ -40,6 +42,8 @@ const Show = () => {
       name,
       description,
       price,
+      onSale,
+      onSaleValue,
     },
     quantity,
     notice,
@@ -74,7 +78,25 @@ const Show = () => {
         <View style={styles.column}>
           <Text style={[styles.boldSubtitle, { marginBottom: 8 }]}>{name}</Text>
           <Text style={[styles.light, { marginBottom: 8 }]}>{description}</Text>
-          <Text style={styles.boldSubtitle}>{treatPrice(price)}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            {onSale && <Text style={styles.boldSubtitle}>De </Text>}
+            <Text
+              style={[
+                onSale ? styles.subtitle : styles.boldSubtitle,
+                onSale && {
+                  textDecorationLine: 'line-through',
+                  marginRight: 8,
+                  color: Theme.color3,
+                },
+              ]}
+            >
+              {treatPrice(price)}
+            </Text>
+            {onSale && <Text style={styles.boldSubtitle}>por </Text>}
+            {onSale && (
+              <Text style={styles.boldSubtitle}>{treatPrice(onSaleValue)}</Text>
+            )}
+          </View>
         </View>
 
         <View style={styles.column}>
@@ -94,7 +116,9 @@ const Show = () => {
           <Button
             title={
               quantity > 0 &&
-              `Adicionar ${quantity} por ${treatPrice(quantity * price)}`
+              `Adicionar ${quantity} por ${treatPrice(
+                quantity * (onSale ? onSaleValue : price)
+              )}`
             }
             status={quantity === 0 ? 'disabled' : ''}
             disabledTitle="Selecione uma quantidade"

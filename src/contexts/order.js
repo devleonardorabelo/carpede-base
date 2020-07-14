@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import AuthContext from './auth';
 
 import { STORE_ID } from '../constants/api';
-import { apiMain } from '../services/api';
+import { api } from '../services/api';
 
 export const OrderContext = createContext();
 
@@ -31,10 +31,21 @@ export const OrderProvider = ({ children }) => {
 
   const calculateTotalValue = (fees = 0) => {
     const calculate = products.reduce(
-      (total, each) => total + each.product.price * each.quantity,
+      (total, each) =>
+        total +
+        (each.product.price - (each.product.price - each.product.onSaleValue)) *
+          each.quantity,
       0
     );
     return calculate + fees;
+  };
+  const calculateTotalDiscount = () => {
+    const calculate = products.reduce(
+      (total, each) =>
+        total + (each.product.price - each.product.onSaleValue) * each.quantity,
+      0
+    );
+    return calculate;
   };
 
   const confirmOrder = async (
@@ -84,7 +95,7 @@ export const OrderProvider = ({ children }) => {
       longitude: customer.longitude,
     };
 
-    const { data } = await apiMain.post('orders/new', model);
+    const { data } = await api.post('order', model);
 
     if (data) setProducts([]);
   };
@@ -97,6 +108,7 @@ export const OrderProvider = ({ children }) => {
         editProduct,
         removeProduct,
         calculateTotalValue,
+        calculateTotalDiscount,
         confirmOrder,
       }}
     >

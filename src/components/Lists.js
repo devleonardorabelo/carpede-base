@@ -44,6 +44,8 @@ export const SlideItem = ({ data, type, large, style }) => {
               name: data.name,
               description: data.description,
               price: data.price,
+              onSale: data.onSale,
+              onSaleValue: data.onSaleValue,
             })
           }
         >
@@ -59,7 +61,27 @@ export const SlideItem = ({ data, type, large, style }) => {
           )}
           <Text style={styles.semiBold}>{data.name}</Text>
           {data.price && (
-            <Text style={styles.medium}>{treatPrice(data.price)}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text
+                style={[
+                  data.onSale ? styles.bold : styles.medium,
+                  { marginRight: 8 },
+                ]}
+              >
+                {treatPrice(data.onSale ? data.onSaleValue : data.price)}
+              </Text>
+              <Text
+                style={[
+                  styles.medium,
+                  data.onSale && {
+                    textDecorationLine: 'line-through',
+                    color: Theme.color3,
+                  },
+                ]}
+              >
+                {data.onSale && treatPrice(data.price)}
+              </Text>
+            </View>
           )}
         </TouchableOpacity>
       )}
@@ -86,17 +108,32 @@ export const SlideHorizontal = ({ data, large, name, type }) => (
     )}
   </View>
 );
-export const Item = ({ action, image, title, description, price }) => (
+export const Item = ({ data, action }) => (
   <TouchableOpacity style={styles.item} onPress={action}>
     <View style={styles.infoItem}>
-      <Text style={styles.bold}>{title}</Text>
-      <Text style={styles.light}>{minimizeText(description)}</Text>
-      <Text style={[styles.medium, { marginTop: 8 }]}>{treatPrice(price)}</Text>
+      <Text style={styles.bold}>{data.name}</Text>
+      <Text style={styles.light}>{minimizeText(data.description)}</Text>
+      <View style={{ flexDirection: 'row', paddingTop: 8 }}>
+        {data.onSale && (
+          <Text style={styles.bold}>{treatPrice(data.onSaleValue)}</Text>
+        )}
+        <Text
+          style={[
+            styles.medium,
+            data.onSale && {
+              textDecorationLine: 'line-through',
+              marginLeft: 8,
+            },
+          ]}
+        >
+          {treatPrice(data.price)}
+        </Text>
+      </View>
     </View>
-    {image && (
+    {data.image && (
       <Image
         style={styles.imageItem}
-        source={{ uri: image }}
+        source={{ uri: data.image }}
         resizeMode="contain"
       />
     )}
@@ -104,6 +141,7 @@ export const Item = ({ action, image, title, description, price }) => (
 );
 export const ListItems = ({ data, onEndReached }) => {
   const { navigate } = useNavigation();
+
   return (
     <>
       {data.length > 0 ? (
@@ -116,10 +154,7 @@ export const ListItems = ({ data, onEndReached }) => {
           onEndReachedThreshold={0.3}
           renderItem={({ item }) => (
             <Item
-              image={item.image}
-              title={item.name}
-              description={item.description}
-              price={item.price}
+              data={item}
               action={() =>
                 navigate('Show', {
                   id: item._id,
@@ -127,6 +162,8 @@ export const ListItems = ({ data, onEndReached }) => {
                   name: item.name,
                   description: item.description,
                   price: item.price,
+                  onSale: item.onSale,
+                  onSaleValue: item.onSaleValue,
                 })
               }
             />
@@ -152,6 +189,8 @@ export const OrderItem = ({ data }) => {
           name: data.product.name,
           description: data.product.description,
           price: data.product.price,
+          onSale: data.product.onSale,
+          onSaleValue: data.product.onSaleValue,
           notice: data.notice,
           quantity: data.quantity,
         })
@@ -167,9 +206,24 @@ export const OrderItem = ({ data }) => {
           <Text style={styles.medium}>
             {`${data.quantity}x ${data.product.name}`}
           </Text>
-          <Text style={styles.light}>
-            {treatPrice(data.product.price * data.quantity)}
-          </Text>
+          <View style={{ flexDirection: 'row' }}>
+            {data.product.onSale && (
+              <Text style={styles.medium}>
+                {treatPrice(data.product.onSaleValue * data.quantity)}
+              </Text>
+            )}
+            <Text
+              style={[
+                styles.light,
+                data.product.onSale && {
+                  textDecorationLine: 'line-through',
+                  marginLeft: 8,
+                },
+              ]}
+            >
+              {treatPrice(data.product.price * data.quantity)}
+            </Text>
+          </View>
           {data.notice !== '' && (
             <View style={{ flexDirection: 'row' }}>
               <Text style={[styles.light, { flexWrap: 'wrap', flex: 1 }]}>
