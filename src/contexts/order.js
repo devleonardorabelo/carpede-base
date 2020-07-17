@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import axios from 'axios';
 import AuthContext from './auth';
 
 import { STORE_ID } from '../constants/api';
@@ -43,6 +44,13 @@ export const OrderProvider = ({ children }) => {
       0
     );
     return calculate;
+  };
+
+  const notifyStore = async (value) => {
+    await axios.post('http://main.carpede.com/orders/notify', {
+      store_id: STORE_ID,
+      total: value,
+    });
   };
 
   const confirmOrder = async (
@@ -93,7 +101,10 @@ export const OrderProvider = ({ children }) => {
 
     const { data } = await api.post('order', model);
 
-    if (data) setProducts([]);
+    if (data) {
+      setProducts([]);
+      notifyStore(model.value);
+    }
   };
 
   return (
@@ -106,6 +117,7 @@ export const OrderProvider = ({ children }) => {
         calculateTotalValue,
         calculateTotalDiscount,
         confirmOrder,
+        notifyStore,
       }}
     >
       {children}

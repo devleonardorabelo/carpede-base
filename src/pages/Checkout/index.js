@@ -166,7 +166,7 @@ const Checkout = () => {
             <Text style={styles.boldSubtitle}>{treatPrice(value)}</Text>
           </View>
           <Button
-            title="Confirmar Pagamento"
+            title="Confirmar Pedido"
             status={
               method !== '' || (amount >= value && change !== null)
                 ? buttonStatus
