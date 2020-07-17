@@ -80,6 +80,7 @@ export const OrderProvider = ({ children }) => {
     }
 
     const model = {
+      store_id: STORE_ID,
       customer: {
         name,
         whatsapp: whatsapp.raw,
