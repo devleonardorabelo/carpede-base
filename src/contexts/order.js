@@ -31,10 +31,7 @@ export const OrderProvider = ({ children }) => {
 
   const calculateTotalValue = (fees = 0) => {
     const calculate = products.reduce(
-      (total, each) =>
-        total +
-        (each.product.price - (each.product.price - each.product.onSaleValue)) *
-          each.quantity,
+      (total, each) => each.product.onSaleValue * each.quantity + total,
       0
     );
     return calculate + fees;
@@ -75,7 +72,6 @@ export const OrderProvider = ({ children }) => {
     }
 
     const model = {
-      store_id: STORE_ID,
       customer: {
         name,
         whatsapp: whatsapp.raw,

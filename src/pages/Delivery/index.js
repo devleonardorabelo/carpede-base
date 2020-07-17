@@ -43,9 +43,9 @@ const Delivery = () => {
         Entregar em:
       </Text>
       <View style={styles.column}>
-        <View style={styles.spaceBetween}>
+        <View style={[styles.spaceBetween]}>
           <Text style={styles.medium}>Endereço: </Text>
-          <Text style={styles.light}>
+          <Text style={[styles.light, { flex: 1, paddingLeft: 8 }]}>
             {`${customer.address} ${customer.complement} ${customer.number}`}
           </Text>
         </View>

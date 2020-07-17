@@ -144,6 +144,13 @@ const Checkout = () => {
           )}
         </View>
         <View style={styles.column}>
+          <View style={styles.spaceBetween}>
+            <Text style={styles.bold}>Total dos produtos: </Text>
+
+            <Text style={styles.light}>
+              {treatPrice(value - delivery - fees)}
+            </Text>
+          </View>
           <View
             style={[
               styles.spaceBetween,

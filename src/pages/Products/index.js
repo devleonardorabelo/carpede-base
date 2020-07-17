@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import OrderContext from '../../contexts/order';
 import { api } from '../../services/api';
+import { STORE_ID } from '../../constants/api';
 
 import styles from '../../global';
 import { ListItems } from '../../components/Lists';
@@ -20,13 +21,13 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const loadProducts = async () => {
+  const loadProducts = async (filter) => {
     if (loading) return;
 
     setLoading(true);
 
     const { data } = await api.get('/products', {
-      params: { category: params.id, page },
+      params: { category: params.id, page, filter, store_id: STORE_ID },
     });
 
     setProducts([...products, ...data]);
@@ -35,14 +36,22 @@ const Products = () => {
   };
 
   useEffect(() => {
-    loadProducts();
+    if (params && params.filter) {
+      loadProducts(params.filter);
+    } else {
+      loadProducts();
+    }
   }, []);
 
   return (
     <SafeAreaView
       style={[styles.container, orderProducts.length && { paddingBottom: 60 }]}
     >
-      <Header iconLeft="arrow-left" actionLeft={goBack} title={params.name} />
+      <Header
+        iconLeft="arrow-left"
+        actionLeft={goBack}
+        title={params.name || 'RESULTADOS'}
+      />
       <ListItems data={products} onEndReached={loadProducts} />
       <ViewOrder
         items={orderProducts}

@@ -88,10 +88,10 @@ export const SlideItem = ({ data, type, large, style }) => {
     </>
   );
 };
-export const SlideHorizontal = ({ data, large, name, type }) => (
-  <View style={styles.slideHorizontal}>
-    <Text style={[styles.boldSubtitle, { paddingLeft: 16 }]}>{name}</Text>
-    {data.length > 0 ? (
+export const SlideHorizontal = ({ data, large, name, type, style }) =>
+  data.length > 0 ? (
+    <View style={[styles.slideHorizontal, style]}>
+      <Text style={[styles.boldSubtitle, { paddingLeft: 16 }]}>{name}</Text>
       <FlatList
         style={{ paddingLeft: 16 }}
         data={data}
@@ -103,11 +103,8 @@ export const SlideHorizontal = ({ data, large, name, type }) => (
         ListFooterComponent={<View style={{ width: 16 }} />}
         horizontal
       />
-    ) : (
-      <LoadingSlide type={type} large={large} />
-    )}
-  </View>
-);
+    </View>
+  ) : null;
 export const Item = ({ data, action }) => (
   <TouchableOpacity style={styles.item} onPress={action}>
     <View style={styles.infoItem}>

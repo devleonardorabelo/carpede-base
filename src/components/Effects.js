@@ -1,68 +1,46 @@
-import React, { useRef, useEffect } from 'react';
-import { View, Animated } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import styles, { Theme } from '../global';
 
-export const Skeleton = ({ children }) => {
-  const fade = useRef(new Animated.Value(0)).current;
-
-  const animateBack = () => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(fade, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fade, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-  };
-
-  useEffect(() => {
-    animateBack();
-  }, []);
-
-  return (
-    <View>
-      <Animated.View style={{ opacity: fade }}>{children}</Animated.View>
+export const LoadingSlide = ({ large }) => (
+  <SkeletonPlaceholder
+    backgroundColor={Theme.background2}
+    highlightColor={Theme.background1}
+    speed={1000}
+  >
+    <View style={[styles.slideHorizontal, { paddingLeft: 16 }]}>
+      <View style={[styles.ghostText, { width: 140, height: 24 }]} />
+      <View style={{ flexDirection: 'row' }}>
+        <View style={styles.slideItem}>
+          <View
+            style={large ? styles.slideLargeItemImage : styles.slideItemImage}
+          />
+          <View style={[styles.ghostText, { width: 120 }]} />
+        </View>
+        <View style={styles.slideItem}>
+          <View
+            style={large ? styles.slideLargeItemImage : styles.slideItemImage}
+          />
+          <View style={[styles.ghostText, { width: 120 }]} />
+        </View>
+        <View style={styles.slideItem}>
+          <View
+            style={large ? styles.slideLargeItemImage : styles.slideItemImage}
+          />
+          <View style={[styles.ghostText, { width: 120 }]} />
+        </View>
+      </View>
     </View>
-  );
-};
-export const LoadingSlideItem = ({ large, type }) => (
-  <View style={styles.slideItem}>
-    <View
-      style={[
-        large ? styles.slideLargeItemImage : styles.slideItemImage,
-        { backgroundColor: Theme.background2 },
-      ]}
-    />
-    <View style={[styles.ghostText, { width: 120 }]} />
-    {type === 'product' && (
-      <View style={[styles.ghostText, { marginTop: 8, width: 60 }]} />
-    )}
-  </View>
-);
-export const LoadingSlide = ({ large, type }) => (
-  <Skeleton>
-    <View
-      style={[
-        styles.slideHorizontal,
-        { flexDirection: 'row', paddingLeft: 16 },
-      ]}
-    >
-      <LoadingSlideItem large={large} type={type} />
-      <LoadingSlideItem large={large} type={type} />
-      <LoadingSlideItem large={large} type={type} />
-    </View>
-  </Skeleton>
+  </SkeletonPlaceholder>
 );
 export const LoadingListItem = () => (
-  <Skeleton>
+  <SkeletonPlaceholder
+    backgroundColor={Theme.background2}
+    highlightColor={Theme.background1}
+    speed={1000}
+  >
     <View style={styles.item}>
       <View style={[styles.infoItem, { flexGrow: 1 }]}>
         <View style={[styles.ghostText, { width: 100 }]} />
@@ -72,7 +50,7 @@ export const LoadingListItem = () => (
         <View style={[styles.ghostText, { marginTop: 8, width: 60 }]} />
       </View>
     </View>
-  </Skeleton>
+  </SkeletonPlaceholder>
 );
 export const LoadingList = () => (
   <View style={styles.listItems}>

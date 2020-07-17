@@ -11,12 +11,14 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import OrderContext from '../../contexts/order';
 import { api } from '../../services/api';
+import { STORE_ID } from '../../constants/api';
 
 import styles, { Theme } from '../../global';
 import { Header } from '../../components/Header';
 import { SlideHorizontal } from '../../components/Lists';
 import { SearchInput } from '../../components/Elements';
 import { ViewOrder } from '../../components/Footer';
+import { LoadingSlide } from '../../components/Effects';
 
 const Home = () => {
   const { navigate } = useNavigation();
@@ -27,26 +29,39 @@ const Home = () => {
   const [categories, setCategories] = useState([]);
   const [onSale, setOnSale] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const loadCategories = async () => {
-    const { data } = await api.get('/categories');
+    const { data } = await api.get('categories', {
+      params: { store_id: STORE_ID },
+    });
     if (data) setCategories(data);
   };
 
   const loadOnSale = async () => {
-    const { data } = await api.get('/onsale');
+    const { data } = await api.get('/onsale', {
+      params: { store_id: STORE_ID },
+    });
     if (data) setOnSale(data);
   };
 
   const loadBestSellers = async () => {
-    const { data } = await api.get('/bestsellers');
+    const { data } = await api.get('/bestsellers', {
+      params: { store_id: STORE_ID },
+    });
     if (data) setBestSellers(data);
   };
 
+  const loadInfos = async () => {
+    await loadCategories();
+    await loadOnSale();
+    await loadBestSellers();
+    setLoading(false);
+  };
+
   useEffect(() => {
-    loadCategories();
-    loadOnSale();
-    loadBestSellers();
+    loadInfos();
   }, []);
 
   useFocusEffect(
@@ -86,26 +101,41 @@ const Home = () => {
             <Text style={[styles.subtitle, { marginTop: -4 }]}>
               Tá com fome de quê?
             </Text>
-            <SearchInput placeholder="Ex: hamburguer" />
+            <SearchInput
+              onChangeText={(e) => setFilter(e)}
+              placeholder="Ex: hamburguer"
+              action={() => navigate('Products', { filter })}
+            />
           </View>
 
-          <SlideHorizontal
-            data={categories}
-            name="Categorias"
-            type="category"
-          />
-          <SlideHorizontal
-            data={onSale}
-            name="Promoções"
-            type="product"
-            large
-          />
-          <SlideHorizontal
-            data={bestSellers}
-            name="Mais vendidos"
-            type="product"
-            large
-          />
+          {loading ? (
+            <>
+              <LoadingSlide />
+              <LoadingSlide large />
+              <LoadingSlide large />
+            </>
+          ) : (
+            <>
+              <SlideHorizontal
+                data={categories}
+                name="Categorias"
+                type="category"
+              />
+              <SlideHorizontal
+                data={onSale}
+                name="Promoções"
+                type="product"
+                large
+              />
+              <SlideHorizontal
+                data={bestSellers}
+                name="Mais vendidos"
+                type="product"
+                style={{ marginBottom: 60 }}
+                large
+              />
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
       <ViewOrder

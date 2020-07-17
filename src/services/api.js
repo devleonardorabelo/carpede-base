@@ -3,4 +3,7 @@ import { API_DOMAIN } from '../constants/api';
 
 export const api = axios.create({
   baseURL: API_DOMAIN,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });

@@ -62,14 +62,15 @@ export const TextArea = ({
     />
   </View>
 );
-export const SearchInput = ({ placeholder, action }) => (
+export const SearchInput = ({ placeholder, onChangeText, action }) => (
   <View style={styles.searchBox}>
     <TextInput
       style={styles.searchInput}
       placeholder={placeholder}
-      action={action}
+      onChangeText={onChangeText}
+      onSubmitEditing={action}
     />
-    <TouchableOpacity style={styles.searchButton}>
+    <TouchableOpacity style={styles.searchButton} onPress={action}>
       <FE name="search" size={28} color={Theme.background4} />
     </TouchableOpacity>
   </View>

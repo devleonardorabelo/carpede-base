@@ -497,6 +497,7 @@ export default StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     borderBottomWidth: StyleSheet.hairlineWidth,
     paddingBottom: 16,
     marginBottom: 16,
