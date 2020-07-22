@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import AuthContext from './auth';
 
@@ -10,6 +10,7 @@ export const OrderContext = createContext();
 export const OrderProvider = ({ children }) => {
   const { customer } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
+  const [storeInfo, setStoreInfo] = useState({});
 
   const addProduct = (item) => setProducts([...products, item]);
 
@@ -108,6 +109,17 @@ export const OrderProvider = ({ children }) => {
     }
   };
 
+  const saveStoreInfo = async () => {
+    const { data } = await api.get('/', {
+      params: { store_id: STORE_ID },
+    });
+    if (data) setStoreInfo(data);
+  };
+
+  useEffect(() => {
+    saveStoreInfo();
+  }, []);
+
   return (
     <OrderContext.Provider
       value={{
@@ -119,6 +131,7 @@ export const OrderProvider = ({ children }) => {
         calculateTotalDiscount,
         confirmOrder,
         notifyStore,
+        storeInfo,
       }}
     >
       {children}

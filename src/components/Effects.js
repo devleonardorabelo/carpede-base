@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 import styles, { Theme } from '../global';
@@ -63,5 +63,45 @@ export const LoadingList = () => (
     <LoadingListItem />
     <LoadingListItem />
     <LoadingListItem />
+  </View>
+);
+export const LoadingOrderRectangle = () => (
+  <SkeletonPlaceholder
+    backgroundColor={Theme.background2}
+    highlightColor={Theme.background1}
+    speed={1000}
+  >
+    <View style={[styles.box, { height: 54 }]} />
+  </SkeletonPlaceholder>
+);
+export const LoadingListOrderRectangle = () => (
+  <View style={{ paddingHorizontal: 16 }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: Theme.background1,
+        paddingHorizontal: 16,
+        paddingBottom: 16,
+      }}
+    >
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={[styles.bold, { width: 60 }]}>Data</Text>
+        <Text style={styles.bold}>Situação</Text>
+      </View>
+      <Text style={[styles.bold, { minWidth: 60, textAlign: 'center' }]}>
+        Total
+      </Text>
+    </View>
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
+    <LoadingOrderRectangle />
   </View>
 );

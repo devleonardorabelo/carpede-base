@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { SafeAreaView, View, Animated, Text, Keyboard } from 'react-native';
+import { SafeAreaView, View, Animated, Text } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Geolocation from '@react-native-community/geolocation';
 import AuthContext from '../../contexts/auth';
@@ -54,7 +54,6 @@ const SecondStep = () => {
 
   const checkData = () => {
     if (address.length > 5 && number > 0) {
-      Keyboard.dismiss();
       setStatusButton(null);
     } else {
       setStatusButton('disabled');

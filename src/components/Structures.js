@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
-import { Modal, View, Image, Text } from 'react-native';
+import { Modal, View, Image, Text, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import MI from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import styles, { Theme } from '../global';
 
 export const Map = ({ initialRegion, coordinate, onDragEnd, noTips }) => (
@@ -36,13 +35,24 @@ export const Map = ({ initialRegion, coordinate, onDragEnd, noTips }) => (
     </Marker>
   </MapView>
 );
-export const ModalView = ({ children, show, image, style }) => (
-  <Modal animationType="fade" transparent visible={show}>
+export const ModalView = ({ children, show, image, style, closeAction }) => (
+  <Modal
+    animationType="fade"
+    transparent
+    visible={show}
+    onRequestClose={closeAction}
+  >
     <View style={styles.backgroundModal}>
       {image && (
         <Image source={image} style={styles.imageModal} resizeMode="contain" />
       )}
       <View style={[styles.modal, image && { paddingTop: 50 }, style]}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+          <TouchableOpacity onPress={closeAction}>
+            <MI name="close" size={28} color={Theme.color2} />
+          </TouchableOpacity>
+        </View>
+
         {children}
       </View>
     </View>

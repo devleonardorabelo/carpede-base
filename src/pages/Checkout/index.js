@@ -188,7 +188,7 @@ const Checkout = () => {
           />
         </View>
       </SafeAreaView>
-      <ModalView show={modalStatus}>
+      <ModalView show={modalStatus} closeAction={() => setModalStatus(false)}>
         {paymentMethod === 'cash' ? (
           <View style={{ padding: 16 }}>
             <Text style={styles.boldSubtitle}>Precisa de Troco?</Text>

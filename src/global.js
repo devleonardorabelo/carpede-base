@@ -370,6 +370,22 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  navItem: {
+    marginRight: 20,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: Theme.background2,
+  },
+  navItemActive: {
+    borderBottomColor: Theme.background3,
+    borderBottomWidth: 2,
+  },
+  box: {
+    backgroundColor: Theme.background2,
+    padding: 16,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
 
   // INPUTS
   groupInput: {

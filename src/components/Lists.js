@@ -172,25 +172,27 @@ export const ListItems = ({ data, onEndReached }) => {
     </>
   );
 };
-export const OrderItem = ({ data }) => {
+export const OrderItem = ({ data, locked }) => {
   const { navigate } = useNavigation();
 
   return (
     <TouchableOpacity
       style={[styles.orderItem]}
       onPress={() =>
-        navigate('Show', {
-          id: data.product._id,
-          idSelect: data.product.idSelect,
-          image: data.product.image,
-          name: data.product.name,
-          description: data.product.description,
-          price: data.product.price,
-          onSale: data.product.onSale,
-          onSaleValue: data.product.onSaleValue,
-          notice: data.notice,
-          quantity: data.quantity,
-        })
+        !locked
+          ? navigate('Show', {
+              id: data.product._id,
+              idSelect: data.product.idSelect,
+              image: data.product.image,
+              name: data.product.name,
+              description: data.product.description,
+              price: data.product.price,
+              onSale: data.product.onSale,
+              onSaleValue: data.product.onSaleValue,
+              notice: data.notice,
+              quantity: data.quantity,
+            })
+          : null
       }
     >
       <View style={{ flexDirection: 'row' }}>
@@ -221,7 +223,7 @@ export const OrderItem = ({ data }) => {
               {treatPrice(data.product.price * data.quantity)}
             </Text>
           </View>
-          {data.notice !== '' && (
+          {data.notice.length > 0 && (
             <View style={{ flexDirection: 'row' }}>
               <Text style={[styles.light, { flexWrap: 'wrap', flex: 1 }]}>
                 {data.notice}
@@ -229,33 +231,83 @@ export const OrderItem = ({ data }) => {
             </View>
           )}
         </View>
-        <View
-          style={{
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-          }}
-        >
-          <MI
-            style={{ marginLeft: 8 }}
-            name="pencil"
-            size={20}
-            color={Theme.background3}
-          />
-        </View>
+        {!locked && (
+          <View
+            style={{
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+            }}
+          >
+            <MI
+              style={{ marginLeft: 8 }}
+              name="pencil"
+              size={20}
+              color={Theme.background3}
+            />
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
 };
-export const ListOrderItems = ({ data }) => {
+export const ListOrderItems = ({ data, locked }) => (
+  <FlatList
+    style={{ paddingHorizontal: 16 }}
+    data={data}
+    keyExtractor={(itens) =>
+      String(`${itens.product._id}/${(Math.random() * 10000).toFixed()}`)
+    }
+    showsVerticalScrollIndicator={false}
+    renderItem={({ item }) => <OrderItem data={item} locked={locked} />}
+  />
+);
+export const OrderRectangle = ({ data }) => {
+  const { navigate } = useNavigation();
   return (
-    <FlatList
-      style={{ paddingHorizontal: 16 }}
-      data={data}
-      keyExtractor={(itens) =>
-        String(`${itens.product._id}/${(Math.random() * 10000).toFixed()}`)
-      }
-      showsVerticalScrollIndicator={false}
-      renderItem={({ item }) => <OrderItem data={item} />}
-    />
+    <TouchableOpacity
+      onPress={() => navigate('Order', { data })}
+      style={[
+        styles.box,
+        { flexDirection: 'row', justifyContent: 'space-between' },
+      ]}
+    >
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={[styles.medium, { width: 60 }]}>
+          {data.date.slice(0, 5)}
+        </Text>
+        <Text style={[styles.bold, { minWidth: 60, textAlign: 'center' }]}>
+          {data.status === 'done' && 'Entregue'}
+          {data.status === 'waiting' && 'Aguardando'}
+        </Text>
+      </View>
+      <Text style={styles.light}>{treatPrice(data.value)}</Text>
+    </TouchableOpacity>
   );
 };
+export const ListOrderRectangle = ({ data }) => (
+  <FlatList
+    style={{ paddingHorizontal: 16 }}
+    data={data}
+    keyExtractor={(itens) => String(itens._id)}
+    renderItem={({ item }) => <OrderRectangle data={item} />}
+    ListHeaderComponent={
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          backgroundColor: Theme.background1,
+          paddingHorizontal: 16,
+          paddingBottom: 16,
+        }}
+      >
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={[styles.bold, { width: 60 }]}>Data</Text>
+          <Text style={styles.bold}>Situação</Text>
+        </View>
+        <Text style={[styles.bold, { minWidth: 60, textAlign: 'center' }]}>
+          Total
+        </Text>
+      </View>
+    }
+  />
+);
