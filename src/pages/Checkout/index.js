@@ -17,25 +17,27 @@ import { ModalView } from '../../components/Structures';
 
 const Checkout = () => {
   const { navigate, goBack } = useNavigation();
-  const { calculateTotalValue, confirmOrder } = useContext(OrderContext);
+  const {
+    calculateTotalValue,
+    calculateTotalProducts,
+    confirmOrder,
+    storeInfo,
+  } = useContext(OrderContext);
   const [value, setValue] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [amount, setAmount] = useState(0);
   const [change, setChange] = useState(null);
   const [method, setMethod] = useState('');
-  const [fees, setFees] = useState(0);
-  const [delivery, setDelivery] = useState(3);
   const [modalStatus, setModalStatus] = useState(false);
   const [buttonStatus, setButtonStatus] = useState(null);
 
   useEffect(() => {
     if (method === 'credit') {
-      setFees(3);
+      setValue(calculateTotalValue(storeInfo.fees.payment));
     } else {
-      setFees(0);
+      setValue(calculateTotalValue());
     }
-    setValue(calculateTotalValue(fees + delivery));
-  }, [fees, delivery, method]);
+  }, [method]);
 
   return (
     <>
@@ -62,7 +64,6 @@ const Checkout = () => {
               setMethod('');
               setAmount(0);
               setChange(null);
-              setFees(0);
               setPaymentMethod('cash');
               setModalStatus(true);
             }}
@@ -75,7 +76,6 @@ const Checkout = () => {
             action={() => {
               setAmount(0);
               setChange(null);
-              setFees(0);
               setPaymentMethod('card');
               setModalStatus(true);
             }}
@@ -133,13 +133,17 @@ const Checkout = () => {
         <View style={styles.column}>
           <View style={styles.spaceBetween}>
             <Text style={styles.medium}>Entrega: </Text>
-            <Text style={styles.light}>{treatPrice(delivery)}</Text>
+            <Text style={styles.light}>
+              {treatPrice(storeInfo.fees.delivery)}
+            </Text>
           </View>
           {method === 'credit' && (
             <View style={styles.spaceBetween}>
               <Text style={styles.medium}>Cartão de cédito: </Text>
 
-              <Text style={styles.light}>{treatPrice(fees)}</Text>
+              <Text style={styles.light}>
+                {treatPrice(storeInfo.fees.payment)}
+              </Text>
             </View>
           )}
         </View>
@@ -148,7 +152,7 @@ const Checkout = () => {
             <Text style={styles.bold}>Total dos produtos: </Text>
 
             <Text style={styles.light}>
-              {treatPrice(value - delivery - fees)}
+              {treatPrice(calculateTotalProducts())}
             </Text>
           </View>
           <View
@@ -175,14 +179,7 @@ const Checkout = () => {
             disabledTitle="Escolha como pagar"
             action={async () => {
               setButtonStatus('loading');
-              await confirmOrder(
-                fees,
-                delivery,
-                paymentMethod,
-                amount,
-                change,
-                method
-              );
+              await confirmOrder(paymentMethod, amount, change, method);
               navigate('Success');
             }}
           />

@@ -23,9 +23,11 @@ import { LoadingSlide } from '../../components/Effects';
 const Home = () => {
   const { navigate } = useNavigation();
   const { customer, signOut } = useContext(AuthContext);
-  const { products: orderProducts, calculateTotalValue } = useContext(
-    OrderContext
-  );
+  const {
+    products: orderProducts,
+    calculateTotalValue,
+    storeInfo,
+  } = useContext(OrderContext);
   const [categories, setCategories] = useState([]);
   const [onSale, setOnSale] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
@@ -140,7 +142,7 @@ const Home = () => {
       </SafeAreaView>
       <ViewOrder
         items={orderProducts}
-        amount={calculateTotalValue()}
+        amount={calculateTotalValue() - storeInfo.fees.delivery}
         active={!!orderProducts.length}
         action={() => navigate('Delivery')}
       />

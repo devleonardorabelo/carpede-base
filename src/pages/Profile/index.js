@@ -23,7 +23,7 @@ import { ListOrderRectangle } from '../../components/Lists';
 import { LoadingListOrderRectangle } from '../../components/Effects';
 
 const Profile = () => {
-  const { goBack } = useNavigation();
+  const { navigate } = useNavigation();
   const { customer, signUp } = useContext(AuthContext);
 
   const [name, setName] = useState(customer.name);
@@ -93,7 +93,11 @@ const Profile = () => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <Header iconLeft="arrow-left" actionLeft={goBack} title="PERFIL" />
+        <Header
+          iconLeft="arrow-left"
+          actionLeft={() => navigate('Home')}
+          title="PERFIL"
+        />
 
         <View style={styles.row}>
           <TouchableOpacity

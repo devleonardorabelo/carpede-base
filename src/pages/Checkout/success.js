@@ -1,13 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { View, SafeAreaView, Text, Image, BackHandler } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import OrderContext from '../../contexts/order';
 
 import imgMap from '../../assets/illustrations/map.png';
 import styles from '../../global';
-import { Button } from '../../components/Elements';
+import { Button, LinkButton } from '../../components/Elements';
 
 const Success = ({ navigation }) => {
   const { navigate } = useNavigation();
+  const { storeInfo } = useContext(OrderContext);
 
   useFocusEffect(
     useCallback(() => {
@@ -45,9 +47,17 @@ const Success = ({ navigation }) => {
           Seu pedido está sendo preparado em em breve entregaremos para você.
         </Text>
         <Text style={[styles.bold, { paddingTop: 8, paddingBottom: 16 }]}>
-          Tempo estimado: 40 ~ 50 minutos
+          Tempo estimado: {storeInfo.averageDeliveryTime} minutos
         </Text>
-        <Button title="Voltar para o início" action={() => navigate('Home')} />
+        <Button
+          title="Acompanhar Pedido"
+          action={() => navigate('Profile')}
+          style={{ marginBottom: 16 }}
+        />
+        <LinkButton
+          title="Voltar para o início"
+          action={() => navigate('Home')}
+        />
       </View>
     </SafeAreaView>
   );

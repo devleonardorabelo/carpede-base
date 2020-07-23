@@ -10,7 +10,12 @@ export const OrderContext = createContext();
 export const OrderProvider = ({ children }) => {
   const { customer } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
-  const [storeInfo, setStoreInfo] = useState({});
+  const [storeInfo, setStoreInfo] = useState({
+    fees: {
+      payment: 0,
+      delivery: 0,
+    },
+  });
 
   const addProduct = (item) => setProducts([...products, item]);
 
@@ -36,12 +41,12 @@ export const OrderProvider = ({ children }) => {
       (total, each) => each.product.onSaleValue * each.quantity + total,
       0
     );
-    return calculate + fees;
+    return calculate + storeInfo.fees.delivery + fees;
   };
-  const calculateTotalDiscount = () => {
+
+  const calculateTotalProducts = () => {
     const calculate = products.reduce(
-      (total, each) =>
-        total + (each.product.price - each.product.onSaleValue) * each.quantity,
+      (total, each) => each.product.onSaleValue * each.quantity + total,
       0
     );
     return calculate;
@@ -54,14 +59,7 @@ export const OrderProvider = ({ children }) => {
     });
   };
 
-  const confirmOrder = async (
-    fees,
-    delivery,
-    paymentMethod,
-    amount,
-    change,
-    method
-  ) => {
+  const confirmOrder = async (paymentMethod, amount, change, method) => {
     const { name, whatsapp, address, complement, number } = customer;
 
     let payment;
@@ -90,10 +88,13 @@ export const OrderProvider = ({ children }) => {
         number,
       },
       fees: {
-        payment: fees,
-        delivery,
+        payment: storeInfo.fees.payment,
+        delivery: storeInfo.fees.delivery,
       },
-      value: calculateTotalValue(fees + delivery),
+      value:
+        method === 'credit'
+          ? calculateTotalValue(storeInfo.fees.payment)
+          : calculateTotalValue(),
       change,
       paymentMethod: payment,
       products,
@@ -114,6 +115,7 @@ export const OrderProvider = ({ children }) => {
       params: { store_id: STORE_ID },
     });
     if (data) setStoreInfo(data);
+    console.log(data);
   };
 
   useEffect(() => {
@@ -128,7 +130,7 @@ export const OrderProvider = ({ children }) => {
         editProduct,
         removeProduct,
         calculateTotalValue,
-        calculateTotalDiscount,
+        calculateTotalProducts,
         confirmOrder,
         notifyStore,
         storeInfo,
