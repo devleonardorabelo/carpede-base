@@ -23,7 +23,7 @@ import { ListOrderRectangle } from '../../components/Lists';
 import { LoadingListOrderRectangle } from '../../components/Effects';
 
 const Profile = () => {
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const { customer, signUp } = useContext(AuthContext);
 
   const [name, setName] = useState(customer.name);

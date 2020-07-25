@@ -47,14 +47,35 @@ export const ModalView = ({ children, show, image, style, closeAction }) => (
         <Image source={image} style={styles.imageModal} resizeMode="contain" />
       )}
       <View style={[styles.modal, image && { paddingTop: 50 }, style]}>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <TouchableOpacity onPress={closeAction}>
-            <MI name="close" size={28} color={Theme.color2} />
-          </TouchableOpacity>
-        </View>
+        {!image && (
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <TouchableOpacity onPress={closeAction}>
+              <MI name="close" size={28} color={Theme.color2} />
+            </TouchableOpacity>
+          </View>
+        )}
 
         {children}
       </View>
     </View>
   </Modal>
+);
+export const Operation = ({ opening, closure }) => (
+  <View
+    style={{
+      paddingVertical: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderBottomColor: Theme.background3,
+      borderBottomWidth: 1,
+    }}
+  >
+    <MI name="close-circle-outline" size={32} color={Theme.color2} />
+    <View style={{ paddingLeft: 8 }}>
+      <Text style={styles.bold}>Estamos fechados no momento.</Text>
+      <Text style={styles.medium}>
+        Abrimos das {opening}h às {closure}h
+      </Text>
+    </View>
+  </View>
 );

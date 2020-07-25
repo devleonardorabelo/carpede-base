@@ -13,11 +13,18 @@ import {
   TextArea,
   LinkButton,
 } from '../../components/Elements';
+import { Operation } from '../../components/Structures';
 
 const Show = () => {
   const { goBack } = useNavigation();
   const { params } = useRoute();
-  const { addProduct, editProduct, removeProduct } = useContext(OrderContext);
+  const {
+    addProduct,
+    editProduct,
+    removeProduct,
+    storeInfo,
+    open,
+  } = useContext(OrderContext);
   const [quantity, setQuantity] = useState(1);
   const [notice, setNotice] = useState('');
 
@@ -98,33 +105,42 @@ const Show = () => {
             )}
           </View>
         </View>
+        {open ? (
+          <View style={styles.column}>
+            <TextArea
+              defaultValue={notice}
+              label="Observações"
+              placeholder="Você quer deixar uma observação ? Escreve aqui!"
+              action={(e) => setNotice(e)}
+            />
+            <QuantityButton
+              quantity={String(quantity)}
+              actionLeft={() => {
+                if (quantity > 0) setQuantity(quantity - 1);
+              }}
+              actionRight={() => setQuantity(quantity + 1)}
+            />
+            <Button
+              title={
+                quantity > 0 &&
+                `Adicionar ${quantity} por ${treatPrice(
+                  quantity * (onSale ? onSaleValue : price)
+                )}`
+              }
+              status={quantity === 0 ? 'disabled' : ''}
+              disabledTitle="Selecione uma quantidade"
+              action={idSelect ? editCurrentProduct : addNewProduct}
+            />
+          </View>
+        ) : (
+          <View style={styles.column}>
+            <Operation
+              opening={storeInfo.operation.opening}
+              closure={storeInfo.operation.closure}
+            />
+          </View>
+        )}
 
-        <View style={styles.column}>
-          <TextArea
-            defaultValue={notice}
-            label="Observações"
-            placeholder="Você quer deixar uma observação ? Escreve aqui!"
-            action={(e) => setNotice(e)}
-          />
-          <QuantityButton
-            quantity={String(quantity)}
-            actionLeft={() => {
-              if (quantity > 0) setQuantity(quantity - 1);
-            }}
-            actionRight={() => setQuantity(quantity + 1)}
-          />
-          <Button
-            title={
-              quantity > 0 &&
-              `Adicionar ${quantity} por ${treatPrice(
-                quantity * (onSale ? onSaleValue : price)
-              )}`
-            }
-            status={quantity === 0 ? 'disabled' : ''}
-            disabledTitle="Selecione uma quantidade"
-            action={idSelect ? editCurrentProduct : addNewProduct}
-          />
-        </View>
         {idSelect && (
           <LinkButton
             icon="trash-can-outline"

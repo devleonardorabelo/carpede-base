@@ -8,6 +8,7 @@ import {
   BackHandler,
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import MI from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthContext from '../../contexts/auth';
 import OrderContext from '../../contexts/order';
 import { api } from '../../services/api';
@@ -19,6 +20,7 @@ import { SlideHorizontal } from '../../components/Lists';
 import { SearchInput } from '../../components/Elements';
 import { ViewOrder } from '../../components/Footer';
 import { LoadingSlide } from '../../components/Effects';
+import { Operation } from '../../components/Structures';
 
 const Home = () => {
   const { navigate } = useNavigation();
@@ -27,6 +29,7 @@ const Home = () => {
     products: orderProducts,
     calculateTotalValue,
     storeInfo,
+    open,
   } = useContext(OrderContext);
   const [categories, setCategories] = useState([]);
   const [onSale, setOnSale] = useState([]);
@@ -108,6 +111,12 @@ const Home = () => {
               placeholder="Ex: hamburguer"
               action={() => navigate('Products', { filter })}
             />
+            {!open && (
+              <Operation
+                opening={storeInfo.operation.opening}
+                closure={storeInfo.operation.closure}
+              />
+            )}
           </View>
 
           {loading ? (

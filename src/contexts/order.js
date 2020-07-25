@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { set } from 'react-native-reanimated';
 import AuthContext from './auth';
 
 import { STORE_ID } from '../constants/api';
@@ -14,8 +15,13 @@ export const OrderProvider = ({ children }) => {
     fees: {
       payment: 0,
       delivery: 0,
+      operation: {
+        opening: '00:00',
+        closure: '00:00',
+      },
     },
   });
+  const [open, setOpen] = useState(true);
 
   const addProduct = (item) => setProducts([...products, item]);
 
@@ -53,7 +59,7 @@ export const OrderProvider = ({ children }) => {
   };
 
   const notifyStore = async (value) => {
-    await axios.post('http://main.carpede.com/orders/notify', {
+    await axios.post('https://main.carpede.com/orders/notify', {
       store_id: STORE_ID,
       total: value,
     });
@@ -88,7 +94,7 @@ export const OrderProvider = ({ children }) => {
         number,
       },
       fees: {
-        payment: storeInfo.fees.payment,
+        payment: method === 'credit' ? storeInfo.fees.payment : 0,
         delivery: storeInfo.fees.delivery,
       },
       value:
@@ -115,12 +121,33 @@ export const OrderProvider = ({ children }) => {
       params: { store_id: STORE_ID },
     });
     if (data) setStoreInfo(data);
-    console.log(data);
+  };
+
+  const checkOperation = async () => {
+    const { opening } = storeInfo.operation;
+    const { closure } = storeInfo.operation;
+
+    const date = new Date();
+    const currentHour = `${String(date.getHours()).padStart(2, '0')}:${String(
+      date.getMinutes()
+    ).padStart(2, '0')}`;
+
+    if (currentHour < opening || currentHour > closure) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
   };
 
   useEffect(() => {
     saveStoreInfo();
   }, []);
+
+  useEffect(() => {
+    if (storeInfo.operation) {
+      checkOperation();
+    }
+  }, [storeInfo]);
 
   return (
     <OrderContext.Provider
@@ -134,6 +161,7 @@ export const OrderProvider = ({ children }) => {
         confirmOrder,
         notifyStore,
         storeInfo,
+        open,
       }}
     >
       {children}
