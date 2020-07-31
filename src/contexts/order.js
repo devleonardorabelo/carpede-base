@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import { set } from 'react-native-reanimated';
 import AuthContext from './auth';
 
 import { STORE_ID } from '../constants/api';
@@ -60,8 +59,10 @@ export const OrderProvider = ({ children }) => {
 
   const notifyStore = async (value) => {
     await axios.post('https://main.carpede.com/orders/notify', {
+      title: 'Novo pedido',
+      body: `Um novo pedido foi efetuado no valor de ${value}`,
       store_id: STORE_ID,
-      total: value,
+      to: 'store',
     });
   };
 

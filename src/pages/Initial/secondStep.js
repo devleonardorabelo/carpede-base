@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SafeAreaView, View, Animated, Text } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging';
 import Geolocation from '@react-native-community/geolocation';
+import { api } from '../../services/api';
+import { STORE_ID } from '../../constants/api';
 import AuthContext from '../../contexts/auth';
 
 import imgSmile from '../../assets/illustrations/smile.png';
@@ -24,6 +27,7 @@ const SecondStep = () => {
   const [showModal, setShowModal] = useState(false);
   const [formHeight, setFormHeight] = useState(0);
   const [statusButton, setStatusButton] = useState('disabled');
+  const [deviceToken, setDeviceToken] = useState('');
 
   const refForm = new Animated.Value(0);
 
@@ -65,7 +69,7 @@ const SecondStep = () => {
   };
 
   const handleSignUp = async () => {
-    await signUp({
+    const model = {
       name: params.name,
       whatsapp: params.whatsapp,
       address,
@@ -73,8 +77,21 @@ const SecondStep = () => {
       number,
       latitude,
       longitude,
-    });
+      deviceToken,
+      store_id: STORE_ID,
+    };
+    api.post('customer', model);
+    await signUp(model);
   };
+
+  const getTokenDevice = async () => {
+    const token = await messaging().getToken();
+    setDeviceToken(token);
+  };
+
+  useEffect(() => {
+    getTokenDevice();
+  }, []);
 
   useEffect(() => checkData(), [address, number]);
 
@@ -102,7 +119,7 @@ const SecondStep = () => {
             setLongitude(e.nativeEvent.coordinate.longitude);
           }}
         />
-        <Animated.View style={{ bottom: refForm }}>
+        <View>
           <View
             style={styles.scrollVertical}
             onLayout={(e) => setFormHeight(e.nativeEvent.layout.height)}
@@ -127,7 +144,7 @@ const SecondStep = () => {
               action={confirmData}
             />
           </View>
-        </Animated.View>
+        </View>
       </SafeAreaView>
       <ModalView image={imgSmile} show={showModal} center>
         <Text style={[styles.subtitle, styles.alignCenter]}>

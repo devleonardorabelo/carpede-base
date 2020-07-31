@@ -27,7 +27,7 @@ export const SlideItem = ({ data, type, large, style }) => {
           {data.image && (
             <Image
               style={styles.slideItemImage}
-              source={{ uri: data.image }}
+              source={{ uri: data.image, cache: 'only-if-cached' }}
               resizeMode="cover"
             />
           )}
@@ -55,7 +55,7 @@ export const SlideItem = ({ data, type, large, style }) => {
                 large ? styles.slideLargeItemImage : styles.slideItemImage,
                 style,
               ]}
-              source={{ uri: data.image }}
+              source={{ uri: data.image, cache: 'only-if-cached' }}
               resizeMode="cover"
             />
           )}
@@ -130,7 +130,7 @@ export const Item = ({ data, action }) => (
     {data.image && (
       <Image
         style={styles.imageItem}
-        source={{ uri: data.image }}
+        source={{ uri: data.image, cache: 'only-if-cached' }}
         resizeMode="contain"
       />
     )}
@@ -198,7 +198,7 @@ export const OrderItem = ({ data, locked }) => {
       <View style={{ flexDirection: 'row' }}>
         <Image
           style={[styles.thumbnailItem, { marginRight: 16 }]}
-          source={{ uri: data.product.image }}
+          source={{ uri: data.product.image, cache: 'only-if-cached' }}
           resizeMode="cover"
         />
         <View style={{ flexGrow: 1 }}>

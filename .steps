@@ -1,15 +1,92 @@
+//INICIALIZAÇÃO
+1° npx react-native init carpede-nomedaloja
+2° alterar arquivos AndroidManifest.xml e copiar do Base App e alterar linha 2 para o nome do pacote.
+3° Gerar nova chave em android/app
+-  keytool -genkeypair -v -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+4° Adicionar no final de android/gradle.properties
+***********************************************************************************************************************
+MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+MYAPP_UPLOAD_STORE_PASSWORD=*****
+MYAPP_UPLOAD_KEY_PASSWORD=*****
+***********************************************************************************************************************
+5° Alterar android/app/build.gradle
+***********************************************************************************************************************
+...
+android {
+    ...
+    defaultConfig {
+        multiDexEnabled true
+        ...
+    }
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
+    buildTypes {
+        release {
+            ...
+            signingConfig signingConfigs.release
+        }
+    }
+}
+dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
+    ...
+}
+...
+***********************************************************************************************************************
+6º Copiar a pasta "res" e "assets" de android/app/src/main e colar no projeto.
+7° Alterar android/app/src/main/java/com/carpede_xxxxxx/MainActivy.java
+***********************************************************************************************************************
+package com.carpede_xxxxxx;
+
+import android.os.Bundle; 
+import com.facebook.react.ReactActivity;
+import org.devio.rn.splashscreen.SplashScreen;
+
+public class MainActivity extends ReactActivity {
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    SplashScreen.show(this, R.style.SplashScreenTheme);
+    super.onCreate(savedInstanceState);
+  }
+  protected String getMainComponentName() {
+    return "carpede_xxxxxx";
+  }
+}
+***********************************************************************************************************************
+8° Alterar aquivo Alterar android/app/src/main/java/com/carpede_xxxxxx/MainApplication.java
+***********************************************************************************************************************
+Linhas
+5 ...
+6 ...
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+9 ...
+10 ..
+***********************************************************************************************************************
+9° Instalar Pacotes
+- npm install @buttercup/react-formatted-input @react-native-community/async-storage @react-native-community/geolocation @react-native-community/masked-view @react-native-community/toolbar-android @react-navigation/native @react-navigation/stack axios intl react-native-gesture-handler react-native-linear-gradient react-native-maps react-native-navigation-bar-color react-native-push-notification react-native-reanimated react-native-safe-area-context react-native-screens react-native-skeleton-placeholder react-native-splash-screen react-native-swipe-gestures react-native-vector-icons socket.io-client
+***********************************************************************************************************************
+10° Copiar pasta src e arquivo App
+
+
 // CONFIGURAÇÕES
 
 ./android/app/src/main/res/...
 Alterar : Gerar icones no Android Studio, como "image asset", escolhendo os icones do sistema e os icones de notificação como SVG.
 ./android/app/src/main/res/drawable/splash.png
 Alterar : Gerar uma imagem PNG (500X500) para a splash screen;
-./android/app/src/main/res/values/colors.xml
-Alterar : Alterar cor principal do aplicativo;
 ./android/app/src/main/res/values/strings.xml
 Alterar : Alterar nome do Aplicativo;
 
-// ESTILIZAÇÃO
 
-./src/global.js
-Alterar: Escolher entre "Light Theme e "Dark Theme"
+keytool -list -v -keystore "z:\Github\carpede-base\android\app\debug.keystore" -alias androiddebugkey -storepass android -keypass android 

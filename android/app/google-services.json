@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "272447631228",
+    "firebase_url": "https://carpede-main.firebaseio.com",
+    "project_id": "carpede-main",
+    "storage_bucket": "carpede-main.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272447631228:android:37c40961ffb35526527ef9",
+        "android_client_info": {
+          "package_name": "com.carpede_base"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272447631228-dtesef6m3p655rqgvjgo8jm9sp9pesnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carpede_base",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "272447631228-ss4hjfp8uv4p7hm3k8mj0r8p72km5jbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1EkVEVZIpCcDpkvEnLma9uPmnpir0TxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272447631228-ss4hjfp8uv4p7hm3k8mj0r8p72km5jbm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272447631228:android:362fc3ba538f2365527ef9",
+        "android_client_info": {
+          "package_name": "com.carpede_negocios"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272447631228-ss4hjfp8uv4p7hm3k8mj0r8p72km5jbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1EkVEVZIpCcDpkvEnLma9uPmnpir0TxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272447631228-ss4hjfp8uv4p7hm3k8mj0r8p72km5jbm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
