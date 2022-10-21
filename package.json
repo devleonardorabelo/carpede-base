@@ -28,7 +28,7 @@
     "react-native-maps": "^0.27.1",
     "react-native-navigation-bar-color": "^2.0.1",
     "react-native-push-notification": "^3.5.2",
-    "react-native-reanimated": "^1.9.0",
+    "react-native-reanimated": "^2.10.0",
     "react-native-safe-area-context": "^3.0.7",
     "react-native-screens": "^2.9.0",
     "react-native-skeleton-placeholder": "^2.0.7",
